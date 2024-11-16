@@ -8,16 +8,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public interface CategoriaService {
+public interface CategoryService {
 
     @Transactional
     CategoryResponse save(CategoryRequest request);
 
     @Transactional
-    CategoryResponse update(CategoryRequest request);
+    CategoryResponse update(Long id, CategoryRequest request);
 
     @Transactional
-    CategoryResponse findByNameCategory(String nomeCategoria);
+    CategoryResponse findByNameCategory(String nome);
 
     CategoryResponse findById(Long id);
 
