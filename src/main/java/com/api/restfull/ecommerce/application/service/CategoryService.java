@@ -19,9 +19,15 @@ public interface CategoryService {
     @Transactional
     CategoryResponse findByNameCategory(String nome);
 
+    @Transactional
+    CategoryResponse desableCategory(Long id);
+
     CategoryResponse findById(Long id);
 
     List<CategoryResponse> findAll();
 
-    void deleteById(Long id);
+    void deleteCategoryDesable(Long id);
+
+
+
 }

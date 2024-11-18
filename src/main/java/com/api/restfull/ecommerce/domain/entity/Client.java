@@ -27,8 +27,8 @@ public class Client {
     private String cpf;
     private LocalDate dataNascimento;
     private String telefone;
+    @Embedded
     private Address endereco;
-    @Enumerated(EnumType.STRING) @Column(nullable = false)
     private boolean ativo;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDate dataCadastro;
@@ -36,6 +36,10 @@ public class Client {
     private LocalDate dataUltimaAtualizacao;
     @OneToMany(mappedBy = "cliente")
     private List<Order> pedidos;
+
+    public void clientDesativo() {
+        this.ativo = false;
+    }
 
     @PreUpdate @PrePersist
     private void formatarTelefone() {

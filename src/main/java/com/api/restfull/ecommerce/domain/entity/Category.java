@@ -5,16 +5,12 @@ import com.api.restfull.ecommerce.application.response.CategoryResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "Categoria")
@@ -25,37 +21,40 @@ public class Category {
     private Long id;
     private String nome;
     private String descricao;
-    @Enumerated(EnumType.STRING) @Column(nullable = false)
-    private boolean ativo;
+    private Boolean ativo;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDate dataCriacao;
+    private LocalDateTime dataCriacao;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDate dataUltimaAtualizacao;
+    private LocalDateTime dataUltimaAtualizacao;
 
-    public static Category fromRequestToEntity(CategoryRequest request) {
-        return Category.builder()
-                .nome(request.getNome())
-                .descricao(request.getDescricao())
-                .build();
+    public Category(CategoryRequest request) {
+       nome = request.nome();
+       descricao = request.descricao();
+       ativo = true;
     }
 
-    public static Category fromResponseToEntity(CategoryResponse response) {
-        return Category.builder()
-                .id(response.getId())
-                .nome(response.getNome())
-                .descricao(response.getDescricao())
-                .ativo(response.isAtivo())
-                .dataCriacao(response.getDataCriacao() != null ? response.getDataCriacao() : LocalDate.now())
-                .dataUltimaAtualizacao(response.getDataUltimaAtualizacao() != null ? response.getDataUltimaAtualizacao() : LocalDate.now())
-                .build();
+    public Category(CategoryResponse response) {
+                id = response.id();
+                nome = response.nome();
+                ativo = response.ativo();
+                descricao = response.descricao();
+                dataCriacao = response.dataCriacao() != null ? response.dataCriacao() : LocalDateTime.now();
+                dataUltimaAtualizacao = response.dataUltimaAtualizacao() != null ? response.dataUltimaAtualizacao() : LocalDateTime.now();
     }
 
-    public void updateCategory(CategoryRequest request){
-        if (request.getNome() != null){
-            this.nome = request.getNome();
+    public void updateCategory(CategoryRequest request) {
+        if (request.nome() != null) {
+            this.nome = request.nome();
         }
-        if (request.getDescricao() != null){
-            this.descricao = request.getDescricao();
+        if (request.descricao() != null) {
+            this.descricao = request.descricao();
         }
+        if (request.ativo() != null) {
+            this.ativo = request.ativo();
+        }
+    }
+
+    public void desableCategory() {
+        this.ativo = false;
     }
 }
