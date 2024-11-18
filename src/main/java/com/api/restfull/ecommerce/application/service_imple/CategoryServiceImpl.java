@@ -20,14 +20,28 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository repository;
 
     @Override
-    public CategoryResponse save(CategoryRequest request) {
+    public CategoryResponse saveCategory(CategoryRequest request) {
         Category category = new Category(request);
         Category obj = repository.save(category);
         return new CategoryResponse(obj);
     }
 
     @Override
-    public CategoryResponse update(Long id, CategoryRequest request) {
+    public CategoryResponse findByIdCategory(Long id) {
+        Optional<Category> optionalCategory = repository.findById(id);
+        return new CategoryResponse(optionalCategory.orElseThrow(() ->
+                new ResourceNotFoundException("Objeto não encontrado! Id: " + id + ", tipo: " + CategoryResponse.class.getName())));
+    }
+
+    @Override
+    public List<CategoryResponse> findAllCategory() {
+        List<Category> categoryList = repository.findAll();
+        List<CategoryResponse> responseList = categoryList.stream().map(c -> new CategoryResponse(c)).collect(Collectors.toList());
+        return responseList;
+    }
+
+    @Override
+    public CategoryResponse updateCategory(Long id, CategoryRequest request) {
         Optional<Category> optionalCategory = repository.findById(id);
         if (optionalCategory.isPresent()) {
             Category obj = optionalCategory.get();
@@ -48,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteCategoryDesable(Long id) {
+    public void deleteDesableCategory(Long id) {
         Category categoria = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com ID: " + id));
         if (categoria.getAtivo()) {
             throw new ResourceNotFoundException("Não é possível excluir uma categoria ativa.");
@@ -61,21 +75,6 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = repository.findByNome(nome).orElseThrow(() -> new ResourceNotFoundException("Categoria com nome '" + nome + "' não encontrada."));
         return new CategoryResponse(category);
     }
-
-    @Override
-    public CategoryResponse findById(Long id) {
-        Optional<Category> optionalCategory = repository.findById(id);
-        return new CategoryResponse(optionalCategory.orElseThrow(() ->
-                new ResourceNotFoundException("Objeto não encontrado! Id: " + id + ", tipo: " + CategoryResponse.class.getName())));
-    }
-
-    @Override
-    public List<CategoryResponse> findAll() {
-        List<Category> categoryList = repository.findAll();
-        List<CategoryResponse> responseList = categoryList.stream().map(c -> new CategoryResponse(c)).collect(Collectors.toList());
-        return responseList;
-    }
-
 
 
 }

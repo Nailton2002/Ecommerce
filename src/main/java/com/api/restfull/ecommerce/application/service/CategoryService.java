@@ -11,10 +11,16 @@ import java.util.List;
 public interface CategoryService {
 
     @Transactional
-    CategoryResponse save(CategoryRequest request);
+    CategoryResponse saveCategory(CategoryRequest request);
 
     @Transactional
-    CategoryResponse update(Long id, CategoryRequest request);
+    CategoryResponse findByIdCategory(Long id);
+
+    @Transactional
+    List<CategoryResponse> findAllCategory();
+
+    @Transactional
+    CategoryResponse updateCategory(Long id, CategoryRequest request);
 
     @Transactional
     CategoryResponse findByNameCategory(String nome);
@@ -22,11 +28,7 @@ public interface CategoryService {
     @Transactional
     CategoryResponse desableCategory(Long id);
 
-    CategoryResponse findById(Long id);
-
-    List<CategoryResponse> findAll();
-
-    void deleteCategoryDesable(Long id);
+    void deleteDesableCategory(Long id);
 
 
 
