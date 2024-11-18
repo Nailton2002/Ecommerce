@@ -13,4 +13,5 @@ public record CategoryRequest(
     public CategoryRequest(Category category) {
         this(category.getNome(), category.getDescricao(), category.getAtivo());
     }
+
 }
