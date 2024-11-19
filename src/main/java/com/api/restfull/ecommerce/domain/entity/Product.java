@@ -70,10 +70,6 @@ public class Product {
         if (request.preco() != null){
             this.preco = request.preco();
         }
-        if (request.categoriaId() != null) {
-            this.categoria = new Category();
-            this.categoria.setId(request.categoriaId());
-        }
         if (request.descricao() != null) {
             this.descricao = request.descricao();
         }
