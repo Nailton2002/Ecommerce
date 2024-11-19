@@ -86,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponse> getAllByParamNameProducts(String nomeCategoria) {
         // Buscar categoria pelo nome
-        var category = categoryRepository.findByNome(nomeCategoria);
+        var category = categoryRepository.findByName(nomeCategoria);
         // Se não encontrar, retorna uma lista vazia
         if (category == null) {
             return List.of();
@@ -133,7 +133,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponse> getByStatusProducts(Boolean ativo) {
-        List<Product> products = repository.findByAtivo(ativo);
+        List<Product> products = repository.findByActives(ativo);
         return products.stream().map(ProductResponse::new).toList();
     }
 

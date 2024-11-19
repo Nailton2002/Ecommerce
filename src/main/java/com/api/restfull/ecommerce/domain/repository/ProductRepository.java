@@ -28,7 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByQuantity(@Param("quantidadeEstoque") Integer quantidadeEstoque);
 
     @Query("SELECT p FROM Produto p WHERE p.ativo = :ativo")
-    List<Product> findByAtivo(@Param("ativo") Boolean ativo);
+    List<Product> findByActives(@Param("ativo") Boolean ativo);
 
     Page<Product> findAll(Pageable pageable);
 }
