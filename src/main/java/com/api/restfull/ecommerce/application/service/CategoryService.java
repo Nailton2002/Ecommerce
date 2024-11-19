@@ -2,6 +2,7 @@ package com.api.restfull.ecommerce.application.service;
 
 import com.api.restfull.ecommerce.application.request.CategoryRequest;
 import com.api.restfull.ecommerce.application.response.CategoryResponse;
+import com.api.restfull.ecommerce.application.response.ProductResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +27,14 @@ public interface CategoryService {
     CategoryResponse findByNameCategory(String nome);
 
     @Transactional
+    List<CategoryResponse> findByDescriptionCategory(String descricao);
+
+    @Transactional
+    List<CategoryResponse> finByActivesCategory(Boolean ativo);
+
+    @Transactional
     CategoryResponse desableCategory(Long id);
 
     void deleteDesableCategory(Long id);
-
-
 
 }

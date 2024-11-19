@@ -72,8 +72,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse findByNameCategory(String nome) {
-        Category category = repository.findByNome(nome).orElseThrow(() -> new ResourceNotFoundException("Categoria com nome '" + nome + "' não encontrada."));
+        Category category = repository.findByName(nome).orElseThrow(() -> new ResourceNotFoundException("Categoria com nome '" + nome + "' não encontrada."));
         return new CategoryResponse(category);
+    }
+
+    @Override
+    public List<CategoryResponse> findByDescriptionCategory(String descricao) {
+        List<Category> categoryList = repository.findByDescription(descricao);
+        return categoryList.stream().map(CategoryResponse::new).toList();
+    }
+
+    @Override
+    public List<CategoryResponse> finByActivesCategory(Boolean ativo) {
+        List<Category> responseList = repository.findByActives(ativo);
+        return responseList.stream().map(CategoryResponse::new).toList();
     }
 
 

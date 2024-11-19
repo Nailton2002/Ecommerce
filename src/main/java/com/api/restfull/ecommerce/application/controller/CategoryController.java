@@ -2,6 +2,7 @@ package com.api.restfull.ecommerce.application.controller;
 
 import com.api.restfull.ecommerce.application.request.CategoryRequest;
 import com.api.restfull.ecommerce.application.response.CategoryResponse;
+import com.api.restfull.ecommerce.application.response.ProductResponse;
 import com.api.restfull.ecommerce.application.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 @RestController
 @CrossOrigin("*")
 @RequiredArgsConstructor
-@RequestMapping("/categorys")
+@RequestMapping("/categories")
 public class CategoryController {
 
     private final CategoryService service;
@@ -27,17 +28,27 @@ public class CategoryController {
         return ResponseEntity.created(uri).body(response);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<CategoryResponse> findByIdCategory(@PathVariable Long id) {
-        return ResponseEntity.ok().body(service.findByIdCategory(id));
-    }
-
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> findAllCategory(@RequestParam(required = false) String nome) {
         if (nome != null) {
             return ResponseEntity.ok(List.of(service.findByNameCategory(nome)));
         }
         return ResponseEntity.ok(service.findAllCategory());
+    }
+
+    @GetMapping("/descriptions")
+    public ResponseEntity<List<CategoryResponse>> findByDescriptionCategory(@RequestParam(name = "descricao") String descricao) {
+        return ResponseEntity.ok(service.findByDescriptionCategory(descricao));
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CategoryResponse> findByIdCategory(@PathVariable Long id) {
+        return ResponseEntity.ok().body(service.findByIdCategory(id));
+    }
+
+    @GetMapping("/actives")
+    public ResponseEntity<List<CategoryResponse>> finByActivesCategory(@RequestParam(name = "ativo") Boolean ativo) {
+        return ResponseEntity.ok(service.finByActivesCategory(ativo));
     }
 
     @PutMapping(value = "/{id}")
