@@ -5,13 +5,13 @@ import jakarta.validation.constraints.NotBlank;
 
 public record CategoryRequest(
         @NotBlank
-        String nome,
+        String name,
         @NotBlank
-        String descricao,
-        Boolean ativo
+        String description,
+        Boolean active
 ) {
     public CategoryRequest(Category category) {
-        this(category.getNome(), category.getDescricao(), category.getAtivo());
+        this(category.getName(), category.getDescription(), category.getActive());
     }
 
 }

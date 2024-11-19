@@ -24,13 +24,13 @@ public interface CategoryService {
     CategoryResponse updateCategory(Long id, CategoryRequest request);
 
     @Transactional
-    CategoryResponse findByNameCategory(String nome);
+    CategoryResponse findByNameCategory(String name);
 
     @Transactional
-    List<CategoryResponse> findByDescriptionCategory(String descricao);
+    List<CategoryResponse> findByDescriptionCategory(String description);
 
     @Transactional
-    List<CategoryResponse> finByActivesCategory(Boolean ativo);
+    List<CategoryResponse> finByActivesCategory(Boolean active);
 
     @Transactional
     CategoryResponse desableCategory(Long id);

@@ -16,39 +16,39 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Pagamento")
-@Table(name = "tb_pagamento")
+@Entity(name = "Payment")
+@Table(name = "tb_payment")
 public class Payment {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    // Pedido associado ao pagamento
-    @ManyToOne @JoinColumn(name = "pedido_id")
-    private Order pedido;
-    // Valor total do pagamento
-    private BigDecimal valor;
-    // Status do pagamento (ex: PENDENTE, APROVADO, REJEITADO, CANCELADO)
+    // order associado ao payment
+    @ManyToOne @JoinColumn(name = "order_id")
+    private Order order;
+    // value sumOfItemsOfOrders do payment
+    private BigDecimal value;
+    // Status do payment (ex: PENDENTE, APROVADO, REJEITADO, CANCELADO)
     @Column(name = "cancelado") @Enumerated(EnumType.STRING)
-    private StatusPayment status;
-    // Método de pagamento (ex: CARTAO_CREDITO, BOLETO, PIX)
+    private StatusPayment statusPayment;
+    // Método de payment (ex: CARTAO_CREDITO, BOLETO, PIX)
     @Column(name = "CARTAO_CREDITO") @Enumerated(EnumType.STRING)
-    private MethodPayment metodo;
-    // Número de transação (gerado pelo processador de pagamento)
+    private MethodPayment methodPayment;
+    // Número de transação (gerado pelo processador de payment)
     @Column(unique = true, nullable = false)
-    private String numeroTransacao;
-    // Data de realização do pagamento
+    private String numberTransaction;
+    // Data de realização do payment
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataPagamento;
-    // Data de criação e última atualização do registro de pagamento
+    private LocalDateTime dataPayment;
+    // Data de criação e última atualização do registro de payment
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataCriacao;
+    private LocalDateTime creationDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataUltimaAtualizacao;
+    private LocalDateTime lastUpdateDate;
 
-    // Número de transação (gerado pelo processador de pagamento)
+    // Número de transação (gerado pelo processador de payment)
     @PrePersist
-    public void gerarNumeroTransacao() {
-        // Gera um UUID e o atribui ao campo numeroTransacao antes de salvar
-        this.numeroTransacao = UUID.randomUUID().toString();
+    public void gerarnumberTransacao() {
+        // Gera um UUID e o atribui ao campo numberTransacao antes de salvar
+        this.numberTransaction = UUID.randomUUID().toString();
     }
 }

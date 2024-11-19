@@ -6,22 +6,22 @@ import java.math.BigDecimal;
 
 public record ProductRequest(
         Long id,
-        String nome,
-        BigDecimal preco,
-        Long categoriaId,
-        String descricao,
-        Integer quantidadeEstoque,
-        Boolean ativo) {
+        String name,
+        BigDecimal price,
+        Long categoryId,
+        String description,
+        Integer quantityStock,
+        Boolean active) {
 
     public ProductRequest(Product product) {
         this(
                 product.getId(),
-                product.getNome(),
-                product.getPreco(),
-                product.getCategoria() != null ? product.getCategoria().getId() : null,
-                product.getDescricao(),
-                product.getQuantidadeEstoque(),
-                product.getAtivo()
+                product.getname(),
+                product.getprice(),
+                product.getcategory() != null ? product.getcategory().getId() : null,
+                product.getdescription(),
+                product.getquantityStock(),
+                product.getactive()
         );
     }
 

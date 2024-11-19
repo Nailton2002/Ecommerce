@@ -11,32 +11,32 @@ import lombok.*;
 @AllArgsConstructor
 public class Address {
 
-    private String complemento;
-    private String logradouro;
-    private String bairro;
-    private String numero;
-    private String cidade;
+    private String complement;
+    private String publicPace;
+    private String neighborhood;
+    private String number;
+    private String city;
     private String cep;
     private String uf;
 
     public void updateInformation(AdressDto dto) {
-        if (dto.complemento() != null) {
-            this.complemento = dto.complemento();
+        if (dto.complement() != null) {
+            this.complement = dto.complement();
         }
-        if (dto.logradouro() != null) {
-            this.logradouro = dto.logradouro();
+        if (dto.publicPace() != null) {
+            this.publicPace = dto.publicPace();
         }
-        if (dto.bairro() != null) {
-            this.bairro = dto.bairro();
+        if (dto.neighborhood() != null) {
+            this.neighborhood = dto.neighborhood();
         }
         if (dto.cep() != null) {
             this.cep = dto.cep();
         }
-        if (dto.numero() != null) {
-            this.numero = dto.numero();
+        if (dto.number() != null) {
+            this.number = dto.number();
         }
-        if (dto.cidade() != null) {
-            this.cidade = dto.cidade();
+        if (dto.city() != null) {
+            this.city = dto.city();
         }
         if (dto.uf() != null) {
             this.uf = dto.uf();

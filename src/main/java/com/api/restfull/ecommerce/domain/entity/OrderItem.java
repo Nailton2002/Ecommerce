@@ -11,21 +11,21 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "ItemPedido")
-@Table(name = "tb_item_pedido")
+@Entity(name = "OrderItem")
+@Table(name = "tb_order_item")
 public class OrderItem {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne @JoinColumn(name = "pedido_id")
-    private Order pedido;
-    // Produto associado ao item do pedido
-    @ManyToOne @JoinColumn(name = "produto_id")
-    private Product produto;
-    // Quantidade do produto no pedido
-    private Integer quantidade;
-    // Preço unitário do produto no momento da compra
-    private BigDecimal precoUnitario;
-    // Subtotal calculado (preço unitário * quantidade)
-    private BigDecimal subtotal;
+    @ManyToOne @JoinColumn(name = "order_id")
+    private Order order;
+    // product associado ao item do order
+    @ManyToOne @JoinColumn(name = "product_id")
+    private Product product;
+    // quantity do product no order
+    private Integer quantity;
+    // Preço unitário do product no momento da compra
+    private BigDecimal unitPrice;
+    // SubsumOfItemsOfOrders calculado (preço unitário * quantity)
+    private BigDecimal subsumOfItemsOfOrders;
 }

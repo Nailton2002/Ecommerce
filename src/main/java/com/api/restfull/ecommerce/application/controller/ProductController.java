@@ -39,8 +39,8 @@ public class ProductController {
     }
 
     @GetMapping("/names")
-    public ResponseEntity<ProductResponse> getByNameProduct(@RequestParam(name = "nome") String nome) {
-        return ResponseEntity.ok(service.getByNameProduct(nome));
+    public ResponseEntity<ProductResponse> getByNameProduct(@RequestParam(name = "name") String name) {
+        return ResponseEntity.ok(service.getByNameProduct(name));
     }
 
     @GetMapping("/pages")
@@ -49,28 +49,28 @@ public class ProductController {
     }
 
     @GetMapping("/searchs")
-    public ResponseEntity<List<ProductResponse>> searchByName(@RequestParam(name = "nome") String nome) {
-        return ResponseEntity.ok(service.searchByName(nome));
+    public ResponseEntity<List<ProductResponse>> searchByName(@RequestParam(name = "name") String name) {
+        return ResponseEntity.ok(service.searchByName(name));
     }
 
     @GetMapping("/descriptions")
-    public ResponseEntity<List<ProductResponse>> getByDescriptionProduct(@RequestParam(name = "descricao") String descricao) {
-        return ResponseEntity.ok(service.getByDescriptionProduct(descricao));
+    public ResponseEntity<List<ProductResponse>> getByDescriptionProduct(@RequestParam(name = "description") String description) {
+        return ResponseEntity.ok(service.getByDescriptionProduct(description));
     }
 
     @GetMapping("/prices")
-    public ResponseEntity<List<ProductResponse>> getSortedByPriceProducts(@RequestParam(defaultValue = "asc") String preco) {
-        return ResponseEntity.ok(service.getSortedByPriceProducts(preco));
+    public ResponseEntity<List<ProductResponse>> getSortedByPriceProducts(@RequestParam(defaultValue = "asc") String price) {
+        return ResponseEntity.ok(service.getSortedByPriceProducts(price));
     }
 
     @GetMapping("/quantitys")
-    public ResponseEntity<List<ProductResponse>> getByQuantityProduct(@RequestParam(name = "quantidadeEstoque") Integer quantidadeEstoque) {
-        return ResponseEntity.ok(service.getByQuantityProduct((quantidadeEstoque)));
+    public ResponseEntity<List<ProductResponse>> getByQuantityProduct(@RequestParam(name = "quantityStock") Integer quantityStock) {
+        return ResponseEntity.ok(service.getByQuantityProduct((quantityStock)));
     }
 
     @GetMapping("/actives")
-    public ResponseEntity<List<ProductResponse>> getByStatusProducts(@RequestParam(name = "ativo") Boolean ativo) {
-        return ResponseEntity.ok(service.getByStatusProducts(ativo));
+    public ResponseEntity<List<ProductResponse>> getByStatusProducts(@RequestParam(name = "active") Boolean active) {
+        return ResponseEntity.ok(service.getByStatusProducts(active));
     }
 
     @PatchMapping("/{id}")
@@ -84,20 +84,20 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    //BUSCA POR PRODUTOS RELACIONADOS A CATEGORIA.
+    //BUSCA POR productS RELACIONADOS A category.
     @GetMapping("/categories/{categoryId}")
     public ResponseEntity<List<ProductResponse>> getAllByIdCategory(@PathVariable Long categoryId) {
         return ResponseEntity.ok().body(service.getAllByParamProducts(categoryId));
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<ProductResponse>> getAllByParamCategory(@RequestParam(value = "categoria", defaultValue = "0") Long id_cat) {
+    public ResponseEntity<List<ProductResponse>> getAllByParamCategory(@RequestParam(value = "category", defaultValue = "0") Long id_cat) {
         return ResponseEntity.ok().body(service.getAllByParamProducts(id_cat));
     }
 
     @GetMapping("/categories/names")
-    public ResponseEntity<List<ProductResponse>> getAllByParamNameCategory(@RequestParam(value = "categoria", defaultValue = "0") String nomeCategoria) {
-        return ResponseEntity.ok().body(service.getAllByParamNameProducts(nomeCategoria));
+    public ResponseEntity<List<ProductResponse>> getAllByParamNameCategory(@RequestParam(value = "category", defaultValue = "0") String namecategory) {
+        return ResponseEntity.ok().body(service.getAllByParamNameProducts(namecategory));
     }
 
 

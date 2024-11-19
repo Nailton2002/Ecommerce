@@ -4,7 +4,6 @@ import com.api.restfull.ecommerce.domain.enums.StatusOrder;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,23 +13,23 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Carrinho")
-@Table(name = "tb_carrinho_compras")
+@Entity(name = "ShoppingCart")
+@Table(name = "tb_shopping_cart")
 public class ShoppingCart {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne @JoinColumn(name = "cliente_id")
-    private Client cliente;
-    @ManyToMany @JoinTable(name = "carrinho_produto", joinColumns = @JoinColumn(name = "carrinho_id"), inverseJoinColumns = @JoinColumn(name = "produto_id"))
-    private List<Product> produtos;
-    // Valor total do carrinho (calculado com base nos itens)
-    private Double total;
+    @ManyToOne @JoinColumn(name = "client_id")
+    private Client client;
+    @ManyToMany @JoinTable(name = "cart_product", joinColumns = @JoinColumn(name = "cart_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<Product> products;
+    // value sumOfItemsOfOrders do cart (calculado com base nos itens)
+    private Double sumOfItemsOfOrders;
     @Column(name = "cancelada") @Enumerated(EnumType.STRING)
-    private StatusOrder status;
-    // Data de criação e última atualização do carrinho
+    private StatusOrder statusOrder;
+    // Data de criação e última atualização do cart
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataCriacao;
+    private LocalDateTime creationDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataUltimaAtualizacao;
+    private LocalDateTime lastUpdateDate;
 }

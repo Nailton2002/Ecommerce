@@ -15,43 +15,42 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Cliente")
-@Table(name = "tb_cliente")
+@Entity(name = "client")
+@Table(name = "tb_client")
 public class Client {
-    // Identificador único
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nome;
+    private String name;
     private String email;
     private String cpf;
-    private LocalDate dataNascimento;
-    private String telefone;
+    private LocalDate dateOfBirth;
+    private String telephone;
     @Embedded
-    private Address endereco;
-    private boolean ativo;
+    private Address address;
+    private boolean active;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDate dataCadastro;
+    private LocalDate registrationDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDate dataUltimaAtualizacao;
-    @OneToMany(mappedBy = "cliente")
-    private List<Order> pedidos;
+    private LocalDate lastUpdateDate;
+    @OneToMany(mappedBy = "client")
+    private List<Order> order;
 
-    public void clientDesativo() {
-        this.ativo = false;
+    public void clientDesactive() {
+        this.active = false;
     }
 
     @PreUpdate @PrePersist
-    private void formatarTelefone() {
-        if (telefone.length() == 10) {
-            telefone = String.format("(%s) %s-%s",
-                    telefone.substring(0, 2),
-                    telefone.substring(2, 6),
-                    telefone.substring(6, 10));
-        } else if (telefone.length() == 11) {
-            telefone = String.format("(%s) %s-%s",
-                    telefone.substring(0, 2),
-                    telefone.substring(2, 7),
-                    telefone.substring(7, 11));
+    private void formatartelephone() {
+        if (telephone.length() == 10) {
+            telephone = String.format("(%s) %s-%s",
+                    telephone.substring(0, 2),
+                    telephone.substring(2, 6),
+                    telephone.substring(6, 10));
+        } else if (telephone.length() == 11) {
+            telephone = String.format("(%s) %s-%s",
+                    telephone.substring(0, 2),
+                    telephone.substring(2, 7),
+                    telephone.substring(7, 11));
         }
     }
 }

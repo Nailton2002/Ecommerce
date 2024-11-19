@@ -27,28 +27,28 @@ public interface ProductService {
     List<ProductResponse> getAllByParamProducts(Long id_cat);
 
     @Transactional
-    List<ProductResponse> getAllByParamNameProducts(String nomeCategoria);
+    List<ProductResponse> getAllByParamNameProducts(String namecategory);
 
     @Transactional
-    List<ProductResponse> searchByName(String nome);
+    List<ProductResponse> searchByName(String name);
 
     @Transactional
-   ProductResponse getByNameProduct(String nome);
+   ProductResponse getByNameProduct(String name);
 
     @Transactional
-    List<ProductResponse> getByDescriptionProduct(String descricao);
+    List<ProductResponse> getByDescriptionProduct(String description);
 
     @Transactional
     List<ProductResponse> getSortedByPriceProducts(String order);
 
     @Transactional
-    List<ProductResponse> getByQuantityProduct(Integer quantidadeEstoque);
+    List<ProductResponse> getByQuantityProduct(Integer quantityStock);
 
     @Transactional
     ProductResponse desableProduct(Long id);
 
     @Transactional
-    List<ProductResponse> getByStatusProducts(Boolean ativo);
+    List<ProductResponse> getByStatusProducts(Boolean active);
 
     @Transactional
     void deleteProduct(Long id);

@@ -16,72 +16,72 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Produto")
-@Table(name = "tb_produto")
+@Entity(name = "product")
+@Table(name = "tb_product")
 public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nome;
-    private BigDecimal preco;
-    @JsonIgnore @ManyToOne @JoinColumn(name = "categoria_id")
-    private Category categoria;
-    @ManyToMany @JoinTable(name = "pedido_produto", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "pedido_id"))
-    private List<Order> pedidos;
-    private String descricao;
-    private Integer quantidadeEstoque;
-    private Boolean ativo;
+    private String name;
+    private BigDecimal price;
+    @JsonIgnore @ManyToOne @JoinColumn(name = "category_id")
+    private Category category;
+    @ManyToMany @JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
+    private List<Order> order;
+    private String description;
+    private Integer quantityStock;
+    private Boolean active;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataCriacao;
+    private LocalDateTime creationDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataUltimaAtualizacao;
+    private LocalDateTime lastUpdateDate;
 
     public Product(ProductRequest request){
-        nome = request.nome();
-        preco = request.preco();
-        // Se categoriaId estiver presente no request, cria a associação com Categoria
-        if (request.categoriaId() != null) {
-            this.categoria = new Category();
-            this.categoria.setId(request.categoriaId());
+        name = request.name();
+        price = request.price();
+        // Se categoryId estiver presente no request, cria a associação com category
+        if (request.categoryId() != null) {
+            this.category = new Category();
+            this.category.setId(request.categoryId());
         }
-        descricao = request.descricao();
-        quantidadeEstoque = request.quantidadeEstoque();
-        ativo = true;
+        description = request.description();
+        quantityStock = request.quantityStock();
+        active = true;
     }
 
     public Product(ProductResponse response){
         id = response.id();
-        nome = response.nome();
-        preco = response.preco();
-        if(response.categoria() != null){
-            categoria = new Category();
-            categoria.setId(response.categoria().id());
+        name = response.name();
+        price = response.price();
+        if(response.category() != null){
+            category = new Category();
+            category.setId(response.category().id());
         }
-        descricao = response.descricao();
-        quantidadeEstoque = response.quantidadeEstoque();
-        ativo = response.ativo();
-        dataCriacao = response.dataCriacao() != null ? response.dataCriacao() : LocalDateTime.now();
-        dataUltimaAtualizacao = response.dataUltimaAtualizacao() != null ? response.dataUltimaAtualizacao() : LocalDateTime.now();
+        description = response.description();
+        quantityStock = response.quantityStock();
+        active = response.active();
+        creationDate = response.creationDate() != null ? response.creationDate() : LocalDateTime.now();
+        lastUpdateDate = response.lastUpdateDate() != null ? response.lastUpdateDate() : LocalDateTime.now();
     }
 
     public void updateProduct(ProductRequest request) {
-        if (request.nome() != null) {
-            this.nome = request.nome();
+        if (request.name() != null) {
+            this.name = request.name();
         }
-        if (request.preco() != null){
-            this.preco = request.preco();
+        if (request.price() != null){
+            this.price = request.price();
         }
-        if (request.descricao() != null) {
-            this.descricao = request.descricao();
+        if (request.description() != null) {
+            this.description = request.description();
         }
-        if (request.quantidadeEstoque() != null){
-            this.quantidadeEstoque = request.quantidadeEstoque();
+        if (request.quantityStock() != null){
+            this.quantityStock = request.quantityStock();
         }
-        if (request.ativo() != null) {
-            this.ativo = request.ativo();
+        if (request.active() != null) {
+            this.active = request.active();
         }
     }
 
     public void desableProduct() {
-        this.ativo = false;
+        this.active = false;
     }
 }

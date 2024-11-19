@@ -7,20 +7,20 @@ import java.time.LocalDateTime;
 
 public record CategoryResponse(
         Long id,
-        String nome,
-        String descricao,
-        Boolean ativo,
+        String name,
+        String description,
+        Boolean active,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-        LocalDateTime dataCriacao,
+        LocalDateTime creationDate,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-        LocalDateTime dataUltimaAtualizacao) {
+        LocalDateTime lastUpdateDate) {
 
     public CategoryResponse(Category category) {
         this(category.getId(),
-             category.getNome(),
-             category.getDescricao(),
-             category.getAtivo(),
-             category.getDataCriacao() != null ? category.getDataCriacao() : LocalDateTime.now(),
-             category.getDataUltimaAtualizacao() != null ? category.getDataUltimaAtualizacao() : LocalDateTime.now());
+             category.getName(),
+             category.getDescription(),
+             category.getActive(),
+             category.getCreationDate() != null ? category.getCreationDate() : LocalDateTime.now(),
+             category.getLastUpdateDate() != null ? category.getLastUpdateDate() : LocalDateTime.now());
     }
 }

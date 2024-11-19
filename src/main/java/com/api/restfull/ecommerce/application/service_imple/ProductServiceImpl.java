@@ -32,8 +32,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse createProduct(ProductRequest request) {
         Product product = new Product(request);
-        Category categoria = categoryRepository.findById(request.categoriaId()).orElseThrow(() -> new ResourceNotFoundException("ID não encontrado"));
-        product.setCategoria(categoria);
+        Category category = categoryRepository.findById(request.categoryId()).orElseThrow(() -> new ResourceNotFoundException("ID não encontrado"));
+        product.setcategory(category);
         repository.save(product);
         return new ProductResponse(product);
     }
@@ -48,27 +48,27 @@ public class ProductServiceImpl implements ProductService {
     public Page<ProductResponse> getAllPagedProducts(int page, int size) {
         // Cria uma Pageable para paginar os dados
         Pageable pageable = PageRequest.of(page, size);
-        // Chama o repositório para obter a página de produtos
+        // Chama o repositório para obter a página de products
         Page<Product> productPage = repository.findAll(pageable);
-        // Converte os produtos em ProductResponse
+        // Converte os products em ProductResponse
         return productPage.map(ProductResponse::new);
     }
 
     @Override
     public ProductResponse updateProduct(ProductRequest request) {
-        // Verifica se o produto existe
+        // Verifica se o product existe
         Optional<Product> productOptional = repository.findById(request.id());
         if (productOptional.isEmpty()) {
-            throw new ResourceNotFoundException("Produto não encontrado com o ID: " + request.id());
+            throw new ResourceNotFoundException("product não encontrado com o ID: " + request.id());
         }
-        // Verifica se a categoria existe
-        if (request.categoriaId() != null) { // Apenas verifica se o ID da categoria foi fornecido
-            boolean categoryExists = categoryRepository.existsById(request.categoriaId());
+        // Verifica se a category existe
+        if (request.categoryId() != null) { // Apenas verifica se o ID da category foi fornecido
+            boolean categoryExists = categoryRepository.existsById(request.categoryId());
             if (!categoryExists) {
-                throw new ResourceNotFoundException("Categoria não encontrada com o ID: " + request.categoriaId());
+                throw new ResourceNotFoundException("category não encontrada com o ID: " + request.categoryId());
             }
         }
-        // Atualiza o produto
+        // Atualiza o product
         Product obj = productOptional.get();
         obj.updateProduct(request);
         Product productUpdate = repository.save(obj);
@@ -84,62 +84,62 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> getAllByParamNameProducts(String nomeCategoria) {
-        // Buscar categoria pelo nome
-        var category = categoryRepository.findByName(nomeCategoria);
+    public List<ProductResponse> getAllByParamNameProducts(String namecategory) {
+        // Buscar category pelo name
+        var category = categoryRepository.findByName(namecategory);
         // Se não encontrar, retorna uma lista vazia
         if (category == null) {
             return List.of();
         }
-        // Buscar os produtos da categoria encontrada
+        // Buscar os products da category encontrada
         var products = repository.findByCategory(category.get().getId());
         // Converter para DTO e retornar
         return products.stream().map(ProductResponse::new).collect(Collectors.toList());
     }
 
     @Override
-    public ProductResponse getByNameProduct(String nome) {
-        Product product = repository.findByName(nome).orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com o nome: " + nome));
+    public ProductResponse getByNameProduct(String name) {
+        Product product = repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("product não encontrado com o name: " + name));
         return new ProductResponse(product);
     }
 
     @Override
-    public List<ProductResponse> searchByName(String nome) {
-        List<Product> products = repository.findByNameContainingIgnoreCase(nome);
+    public List<ProductResponse> searchByName(String name) {
+        List<Product> products = repository.findByNameContainingIgnoreCase(name);
         return products.stream().map(ProductResponse::new).collect(Collectors.toList());
     }
 
 
     @Override
-    public List<ProductResponse> getByDescriptionProduct(String descricao) {
-        List<Product> list = repository.findByDescription(descricao);
+    public List<ProductResponse> getByDescriptionProduct(String description) {
+        List<Product> list = repository.findByDescription(description);
         List<ProductResponse> responseList = list.stream().map(ProductResponse::new).toList();
         return responseList;
     }
 
     @Override
-    public List<ProductResponse> getSortedByPriceProducts(String preco) {
-        Sort sortOrder = preco.equalsIgnoreCase("desc") ? Sort.by("preco").descending() : Sort.by("preco").ascending();
+    public List<ProductResponse> getSortedByPriceProducts(String price) {
+        Sort sortOrder = price.equalsIgnoreCase("desc") ? Sort.by("price").descending() : Sort.by("price").ascending();
         List<Product> products = repository.findAll(sortOrder);
         return products.stream().map(ProductResponse::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<ProductResponse> getByQuantityProduct(Integer quantidadeEstoque) {
-        List<Product> list = repository.findByQuantity(quantidadeEstoque);
+    public List<ProductResponse> getByQuantityProduct(Integer quantityStock) {
+        List<Product> list = repository.findByQuantity(quantityStock);
         List<ProductResponse> responseList = list.stream().map(ProductResponse::new).toList();
         return responseList;
     }
 
     @Override
-    public List<ProductResponse> getByStatusProducts(Boolean ativo) {
-        List<Product> products = repository.findByActives(ativo);
+    public List<ProductResponse> getByStatusProducts(Boolean active) {
+        List<Product> products = repository.findByActives(active);
         return products.stream().map(ProductResponse::new).toList();
     }
 
     @Override
     public ProductResponse desableProduct(Long id) {
-        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com ID: " + id));
+        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("category não encontrada com ID: " + id));
         product.desableProduct();
         repository.save(product);
         return new ProductResponse(product);
@@ -147,9 +147,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long id) {
-        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Produto não encontrada com ID: " + id));
-        if (product.getAtivo()) {
-            throw new ResourceNotFoundException("Não é possível excluir um produto ativo.");
+        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product não encontrada com ID: " + id));
+        if (product.getactive()) {
+            throw new ResourceNotFoundException("Não é possível excluir um product active.");
         }
        repository.delete(product);
     }

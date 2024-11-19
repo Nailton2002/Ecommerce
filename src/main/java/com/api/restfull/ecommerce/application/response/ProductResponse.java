@@ -8,37 +8,37 @@ import java.time.LocalDateTime;
 
 public record ProductResponse(
         Long id,
-        String nome,
-        // Preço unitário do produto
-        BigDecimal preco,
-        CategoryResponse categoria,
+        String name,
+        // Preço unitário do product
+        BigDecimal price,
+        CategoryResponse category,
 
-//      List<OrderResponse> pedidos,
+//      List<OrderResponse> order,
 
-        // Descrição detalhada do produto
-        String descricao,
-        // Quantidade disponível em estoque
-        Integer quantidadeEstoque,
-        // Status do produto (ativo/inativo)
-        Boolean ativo,
-        // Datas de criação e última atualização do produto
+        // Descrição detalhada do product
+        String description,
+        // quantity disponível em estoque
+        Integer quantityStock,
+        // Status do product (active/inactive)
+        Boolean active,
+        // Datas de criação e última atualização do product
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-        LocalDateTime dataCriacao,
+        LocalDateTime creationDate,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-        LocalDateTime dataUltimaAtualizacao) {
+        LocalDateTime lastUpdateDate) {
 
     // Construtor que converte uma entidade `Product` para o DTO
     public ProductResponse(Product product) {
         this(
                 product.getId(),
-                product.getNome(),
-                product.getPreco(),
-                product.getCategoria() != null ? new CategoryResponse(product.getCategoria()) : null,
-                product.getDescricao(),
-                product.getQuantidadeEstoque(),
-                product.getAtivo(),
-                product.getDataCriacao() != null ? product.getDataCriacao() : LocalDateTime.now(),
-                product.getDataUltimaAtualizacao() != null ? product.getDataUltimaAtualizacao() : LocalDateTime.now()
+                product.getName(),
+                product.getprice(),
+                product.getcategory() != null ? new CategoryResponse(product.getcategory()) : null,
+                product.getDescription(),
+                product.getquantityStock(),
+                product.getActive(),
+                product.getCreationDate() != null ? product.getCreationDate() : LocalDateTime.now(),
+                product.getLastUpdateDate() != null ? product.getLastUpdateDate() : LocalDateTime.now()
         );
     }
 }

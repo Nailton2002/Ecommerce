@@ -49,42 +49,42 @@ public class CategoryServiceImpl implements CategoryService {
             Category categoryUpdate = repository.save(obj);
             return new CategoryResponse(categoryUpdate);
         } else {
-            throw new ResourceNotFoundException("Categoria não encontrado com o ID: " + id);
+            throw new ResourceNotFoundException("category não encontrado com o ID: " + id);
         }
     }
 
     @Override
     public CategoryResponse desableCategory(Long id) {
-        Category categoria = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com ID: " + id));
-        categoria.desableCategory();
-        repository.save(categoria);
-        return new CategoryResponse(categoria);
-    }
-
-    @Override
-    public void deleteDesableCategory(Long id) {
-        Category categoria = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com ID: " + id));
-        if (categoria.getAtivo()) {
-            throw new ResourceNotFoundException("Não é possível excluir uma categoria ativa.");
-        }
-        repository.delete(categoria);
-    }
-
-    @Override
-    public CategoryResponse findByNameCategory(String nome) {
-        Category category = repository.findByName(nome).orElseThrow(() -> new ResourceNotFoundException("Categoria com nome '" + nome + "' não encontrada."));
+        Category category = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("category não encontrada com ID: " + id));
+        category.desableCategory();
+        repository.save(category);
         return new CategoryResponse(category);
     }
 
     @Override
-    public List<CategoryResponse> findByDescriptionCategory(String descricao) {
-        List<Category> categoryList = repository.findByDescription(descricao);
+    public void deleteDesableCategory(Long id) {
+        Category category = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("category não encontrada com ID: " + id));
+        if (category.getactive()) {
+            throw new ResourceNotFoundException("Não é possível excluir uma category ativa.");
+        }
+        repository.delete(category);
+    }
+
+    @Override
+    public CategoryResponse findByNameCategory(String name) {
+        Category category = repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("category com name '" + name + "' não encontrada."));
+        return new CategoryResponse(category);
+    }
+
+    @Override
+    public List<CategoryResponse> findByDescriptionCategory(String description) {
+        List<Category> categoryList = repository.findByDescription(description);
         return categoryList.stream().map(CategoryResponse::new).toList();
     }
 
     @Override
-    public List<CategoryResponse> finByActivesCategory(Boolean ativo) {
-        List<Category> responseList = repository.findByActives(ativo);
+    public List<CategoryResponse> finByActivesCategory(Boolean active) {
+        List<Category> responseList = repository.findByActives(active);
         return responseList.stream().map(CategoryResponse::new).toList();
     }
 

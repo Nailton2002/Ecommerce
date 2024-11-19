@@ -12,23 +12,23 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query("SELECT obj FROM Produto obj WHERE obj.categoria.id = :id_cat ORDER BY nome")
+    @Query("SELECT obj FROM product obj WHERE obj.category.id = :id_cat ORDER BY name")
     List<Product> findByCategory(@Param(value = "id_cat") Long id_cat);
 
-    @Query("SELECT p FROM Produto p WHERE LOWER(p.nome) LIKE LOWER(CONCAT('%', :nome, '%'))")
-    List<Product> findByNameContainingIgnoreCase(@Param("nome") String nome);
+    @Query("SELECT p FROM product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
+    List<Product> findByNameContainingIgnoreCase(@Param("name") String name);
 
-    @Query("SELECT p FROM Produto p WHERE LOWER(p.nome) = LOWER(:nome)")
-    Optional<Product> findByName(@Param("nome") String nome);
+    @Query("SELECT p FROM product p WHERE LOWER(p.name) = LOWER(:name)")
+    Optional<Product> findByName(@Param("name") String name);
 
-    @Query(value = "SELECT p FROM Produto p WHERE p.descricao = :descricao")
-    List<Product> findByDescription(@Param("descricao") String descricao);
+    @Query(value = "SELECT p FROM product p WHERE p.description = :description")
+    List<Product> findByDescription(@Param("description") String description);
 
-    @Query(value = "SELECT p FROM Produto p WHERE p.quantidadeEstoque = :quantidadeEstoque")
-    List<Product> findByQuantity(@Param("quantidadeEstoque") Integer quantidadeEstoque);
+    @Query(value = "SELECT p FROM product p WHERE p.quantityStock = :quantityStock")
+    List<Product> findByQuantity(@Param("quantityStock") Integer quantityStock);
 
-    @Query("SELECT p FROM Produto p WHERE p.ativo = :ativo")
-    List<Product> findByActives(@Param("ativo") Boolean ativo);
+    @Query("SELECT p FROM product p WHERE p.active = :active")
+    List<Product> findByActives(@Param("active") Boolean active);
 
     Page<Product> findAll(Pageable pageable);
 }

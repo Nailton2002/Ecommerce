@@ -13,48 +13,48 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Categoria")
-@Table(name = "tb_categoria")
+@Entity(name = "Category")
+@Table(name = "tb_category")
 public class Category {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nome;
-    private String descricao;
-    private Boolean ativo;
+    private String name;
+    private String description;
+    private Boolean active;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataCriacao;
+    private LocalDateTime creationDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataUltimaAtualizacao;
+    private LocalDateTime lastUpdateDate;
 
     public Category(CategoryRequest request) {
-       nome = request.nome();
-       descricao = request.descricao();
-       ativo = true;
+       name = request.name();
+       description = request.description();
+       active = true;
     }
 
     public Category(CategoryResponse response) {
                 id = response.id();
-                nome = response.nome();
-                ativo = response.ativo();
-                descricao = response.descricao();
-                dataCriacao = response.dataCriacao() != null ? response.dataCriacao() : LocalDateTime.now();
-                dataUltimaAtualizacao = response.dataUltimaAtualizacao() != null ? response.dataUltimaAtualizacao() : LocalDateTime.now();
+                name = response.name();
+                active = response.active();
+                description = response.description();
+                creationDate = response.creationDate() != null ? response.creationDate() : LocalDateTime.now();
+                lastUpdateDate = response.lastUpdateDate() != null ? response.lastUpdateDate() : LocalDateTime.now();
     }
 
     public void updateCategory(CategoryRequest request) {
-        if (request.nome() != null) {
-            this.nome = request.nome();
+        if (request.name() != null) {
+            this.name = request.name();
         }
-        if (request.descricao() != null) {
-            this.descricao = request.descricao();
+        if (request.description() != null) {
+            this.description = request.description();
         }
-        if (request.ativo() != null) {
-            this.ativo = request.ativo();
+        if (request.active() != null) {
+            this.active = request.active();
         }
     }
 
     public void desableCategory() {
-        this.ativo = false;
+        this.active = false;
     }
 }

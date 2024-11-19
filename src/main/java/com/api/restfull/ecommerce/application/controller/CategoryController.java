@@ -29,16 +29,16 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> findAllCategory(@RequestParam(required = false) String nome) {
-        if (nome != null) {
-            return ResponseEntity.ok(List.of(service.findByNameCategory(nome)));
+    public ResponseEntity<List<CategoryResponse>> findAllCategory(@RequestParam(required = false) String name) {
+        if (name != null) {
+            return ResponseEntity.ok(List.of(service.findByNameCategory(name)));
         }
         return ResponseEntity.ok(service.findAllCategory());
     }
 
     @GetMapping("/descriptions")
-    public ResponseEntity<List<CategoryResponse>> findByDescriptionCategory(@RequestParam(name = "descricao") String descricao) {
-        return ResponseEntity.ok(service.findByDescriptionCategory(descricao));
+    public ResponseEntity<List<CategoryResponse>> findByDescriptionCategory(@RequestParam(name = "description") String description) {
+        return ResponseEntity.ok(service.findByDescriptionCategory(description));
     }
 
     @GetMapping(value = "/{id}")
@@ -47,8 +47,8 @@ public class CategoryController {
     }
 
     @GetMapping("/actives")
-    public ResponseEntity<List<CategoryResponse>> finByActivesCategory(@RequestParam(name = "ativo") Boolean ativo) {
-        return ResponseEntity.ok(service.finByActivesCategory(ativo));
+    public ResponseEntity<List<CategoryResponse>> finByActivesCategory(@RequestParam(name = "active") Boolean active) {
+        return ResponseEntity.ok(service.finByActivesCategory(active));
     }
 
     @PutMapping(value = "/{id}")

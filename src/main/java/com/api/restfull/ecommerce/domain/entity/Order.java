@@ -5,7 +5,6 @@ import com.api.restfull.ecommerce.domain.model.Address;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,38 +14,38 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Pedido")
-@Table(name = "tb_pedido")
+@Entity(name = "Order")
+@Table(name = "tb_order")
 public class Order {
 
-    // Identificador único do pedido
+    // Identificador único do order
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    // Cliente associado ao pedido
-    @ManyToOne @JoinColumn(name = "cliente_id")
-    private Client cliente;
-    @ManyToMany @JoinTable(name = "pedido_produto", joinColumns = @JoinColumn(name = "pedido_id"), inverseJoinColumns = @JoinColumn(name = "produto_id"))
-    private List<Product> produtos;
-    // Conjunto de itens do pedido
-    @OneToMany(mappedBy = "pedido")
-    private List<OrderItem> itensPedidos;
-    // Informações de pagamento
-    @OneToMany(mappedBy = "pedido")
-    private List<Payment> pagamento;
-    // Status do pedido (ex: PENDENTE, APROVADO, CANCELADO, FINALIZADO)
+    // client associado ao order
+    @ManyToOne @JoinColumn(name = "client_id")
+    private Client client;
+    @ManyToMany @JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private List<Product> products;
+    // Conjunto de itens do order
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItens;
+    // Informações de payment
+    @OneToMany(mappedBy = "order")
+    private List<Payment> payment;
+    // Status do order (ex: PENDENTE, APROVADO, CANCELADO, FINALIZADO)
     @Column(name = "cancelada") @Enumerated(EnumType.STRING)
-    private StatusOrder statusPedidos;
-    // Total calculado do pedido (cálculo dinâmico com base nos itens)
-    private Double total;
-    // Datas de criação e última atualização do pedido
+    private StatusOrder statusOrder;
+    // sumOfItemsOfOrders calculado do order (cálculo dinâmico com base nos itens)
+    private Double sumOfItemsOfOrders;
+    // Datas de criação e última atualização do order
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataCriacao;
+    private LocalDateTime creationDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataEntregaPrevista;
+    private LocalDateTime expectedDeliveryDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime dataUltimaAtualizacao;
+    private LocalDateTime lastUpdateDate;
     // Endereço de entrega
-    private Address enderecoEntrega;
+    private Address addressEntrega;
     // Data prevista para entrega
 
 }

@@ -11,10 +11,10 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
-public record ClientRequest(@NotBlank(message = "O nome é obrigatório.")
-                            @Size(min = 3, max = 100, message = "O nome deve ter entre 3 e 100 caracteres.")
+public record ClientRequest(@NotBlank(message = "O name é obrigatório.")
+                            @Size(min = 3, max = 100, message = "O name deve ter entre 3 e 100 caracteres.")
                             @Column(nullable = false)
-                            String nome,
+                            String name,
                             @Email(message = "Formato do email é inválido")
                             @NotBlank(message = "Email é obrigatório")
                             String email,
@@ -25,16 +25,16 @@ public record ClientRequest(@NotBlank(message = "O nome é obrigatório.")
                             @NotNull(message = "A data de nascimento é obrigatória.")
                             @Past(message = "A data de nascimento deve estar no passado.")
                             @JsonFormat(pattern = "dd/MM/yyyy")
-                            LocalDate dataNascimento,
+                            LocalDate dateOfBirth,
                             @Column(nullable = false)
-                            @NotBlank(message = "Telefone é obrigatório")
-                            @Pattern(regexp = "\\d{10,11}", message = "O telefone deve conter 10 ou 11 dígitos.")
-                            String telefone,
+                            @NotBlank(message = "telephone é obrigatório")
+                            @Pattern(regexp = "\\d{10,11}", message = "O telephone deve conter 10 ou 11 dígitos.")
+                            String telephone,
                             @Enumerated(EnumType.STRING)
                             @Column(nullable = false)
-                            boolean ativo,
+                            boolean active,
                             @Valid @NotNull(message = "Dados do endereço são obrigatórios")
-                            AdressDto endereco) {
+                            AdressDto address) {
 
 
 }
