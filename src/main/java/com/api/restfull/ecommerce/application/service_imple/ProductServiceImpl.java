@@ -7,6 +7,7 @@ import com.api.restfull.ecommerce.application.service.CategoryService;
 import com.api.restfull.ecommerce.application.service.ProductService;
 import com.api.restfull.ecommerce.domain.entity.Category;
 import com.api.restfull.ecommerce.domain.entity.Product;
+import com.api.restfull.ecommerce.domain.exception.BusinessRuleException;
 import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundException;
 import com.api.restfull.ecommerce.domain.repository.CategoryRepository;
 import com.api.restfull.ecommerce.domain.repository.ProductRepository;
@@ -29,13 +30,25 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryService categoryService;
     private final ProductRepository repository;
 
-    @Override
     public ProductResponse createProduct(ProductRequest request) {
+        // Busca produtos com o mesmo nome
+        List<Product> productsWithSameName = repository.findByNameDescriptionActive(request.name());
+
+        // Valida se existe um produto ativo com o mesmo nome e descrição
+        boolean existsActiveProductWithSameDescription = productsWithSameName.stream().anyMatch(product ->
+        product.getActive() && product.getDescription().equalsIgnoreCase(request.description()));
+
+        if (existsActiveProductWithSameDescription) {
+            throw new BusinessRuleException("Produto ativo com o mesmo nome e descrição já existe.");
+        }
+        // Busca a categoria e cria o produto
+        Category category = categoryRepository.findById(request.categoryId()).orElseThrow(
+        () -> new ResourceNotFoundException("Categoria não encontrada para o ID: " + request.categoryId()));
+
         Product product = new Product(request);
-        Category category = categoryRepository.findById(request.categoryId()).orElseThrow(() -> new ResourceNotFoundException("ID não encontrado"));
-        product.setcategory(category);
-        repository.save(product);
-        return new ProductResponse(product);
+        product.setCategory(category);
+        Product savedProduct = repository.save(product);
+        return new ProductResponse(savedProduct);
     }
 
     @Override
@@ -148,9 +161,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product não encontrada com ID: " + id));
-        if (product.getactive()) {
+        if (product.getActive()) {
             throw new ResourceNotFoundException("Não é possível excluir um product active.");
         }
-       repository.delete(product);
+        repository.delete(product);
     }
 }

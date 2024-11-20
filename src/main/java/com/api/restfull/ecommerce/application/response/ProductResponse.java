@@ -32,10 +32,10 @@ public record ProductResponse(
         this(
                 product.getId(),
                 product.getName(),
-                product.getprice(),
-                product.getcategory() != null ? new CategoryResponse(product.getcategory()) : null,
+                product.getPrice(),
+                product.getCategory() != null ? new CategoryResponse(product.getCategory()) : null,
                 product.getDescription(),
-                product.getquantityStock(),
+                product.getQuantityStock(),
                 product.getActive(),
                 product.getCreationDate() != null ? product.getCreationDate() : LocalDateTime.now(),
                 product.getLastUpdateDate() != null ? product.getLastUpdateDate() : LocalDateTime.now()
