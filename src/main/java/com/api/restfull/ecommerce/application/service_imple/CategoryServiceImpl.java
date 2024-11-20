@@ -4,6 +4,7 @@ import com.api.restfull.ecommerce.application.request.CategoryRequest;
 import com.api.restfull.ecommerce.application.response.CategoryResponse;
 import com.api.restfull.ecommerce.application.service.CategoryService;
 import com.api.restfull.ecommerce.domain.entity.Category;
+import com.api.restfull.ecommerce.domain.exception.BusinessRuleException;
 import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundException;
 import com.api.restfull.ecommerce.domain.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,15 +43,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
-        Optional<Category> optionalCategory = repository.findById(id);
-        if (optionalCategory.isPresent()) {
-            Category obj = optionalCategory.get();
-            obj.updateCategory(request);
-            Category categoryUpdate = repository.save(obj);
-            return new CategoryResponse(categoryUpdate);
-        } else {
-            throw new ResourceNotFoundException("category não encontrado com o ID: " + id);
+        // Busca a categoria pelo ID
+        Category category = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com o ID: " + id));
+        // Verifica se o nome já existe em outra categoria
+        Optional<Category> existingCategory = repository.findByName(request.name());
+       // Valida se o nome existe em outra categoria
+        if (existingCategory.isPresent() && !existingCategory.get().getId().equals(id)) {
+            throw new BusinessRuleException("O nome da categoria já está em uso por outra categoria.");
         }
+        // Atualiza os dados da categoria
+        category.updateCategory(request);
+        // Salva a categoria atualizada
+        Category updatedCategory = repository.save(category);
+        // Retorna a resposta com os dados atualizados
+        return new CategoryResponse(updatedCategory);
     }
 
     @Override
@@ -64,7 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteDesableCategory(Long id) {
         Category category = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("category não encontrada com ID: " + id));
-        if (category.getactive()) {
+        if (category.getActive()) {
             throw new ResourceNotFoundException("Não é possível excluir uma category ativa.");
         }
         repository.delete(category);

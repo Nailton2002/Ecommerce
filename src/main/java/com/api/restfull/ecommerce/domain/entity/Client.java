@@ -1,5 +1,8 @@
 package com.api.restfull.ecommerce.domain.entity;
 
+import com.api.restfull.ecommerce.application.dto.AddressDto;
+import com.api.restfull.ecommerce.application.request.ClientRequest;
+import com.api.restfull.ecommerce.application.response.ClientResponse;
 import com.api.restfull.ecommerce.domain.model.Address;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -10,12 +13,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "client")
+@Entity(name = "Client")
 @Table(name = "tb_client")
 public class Client {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,23 +27,68 @@ public class Client {
     private String name;
     private String email;
     private String cpf;
-    private LocalDate dateOfBirth;
     private String telephone;
+    private boolean active;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateOfBirth;
     @Embedded
     private Address address;
-    private boolean active;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDate registrationDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDate lastUpdateDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
+    private LocalDateTime registrationDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
+    private LocalDateTime lastUpdateDate;
     @OneToMany(mappedBy = "client")
     private List<Order> order;
+
+    public Client(ClientRequest request) {
+        this.name = request.name();
+        this.email = request.email();
+        this.cpf = request.cpf();
+        this.dateOfBirth = request.dateOfBirth();
+        this.telephone = request.telephone();
+        this.active = true;
+        // Garante que o endereço só seja configurado se o request.address() não for nulo
+        if (request.address() != null) {
+            this.setAddress(new Address(request.address()));
+        } else {
+            throw new IllegalArgumentException("O endereço não pode ser nulo.");
+        }
+    }
+
+    public Client(ClientResponse response) {
+        this.id = response.id();
+        this.name = response.name();
+        this.email = response.email();
+        this.cpf = response.cpf();
+        this.dateOfBirth = response.dateOfBirth();
+        this.telephone = response.telephone();
+        this.active = response.active();
+        this.registrationDate = response.registrationDate() != null ? response.registrationDate() : LocalDateTime.now();
+        this.lastUpdateDate = response.lastUpdateDate() != null ? response.lastUpdateDate() : LocalDateTime.now();
+        // Garante que o endereço só seja configurado se o response.address() não for nulo
+        if (response.address() != null) {
+            this.setAddress(new Address(response.address()));
+        } else {
+            this.setAddress(null); // Define como null explicitamente se não houver endereço
+        }
+    }
+
+    public void updateClient(ClientRequest request) {
+        if (request.name() != null) this.name = request.name();
+        if (request.email() != null) this.email = request.email();
+        if (request.cpf() != null) this.cpf = request.cpf();
+        if (request.dateOfBirth() != null) this.dateOfBirth = request.dateOfBirth();
+        if (request.telephone() != null) this.telephone = request.telephone();
+        if (request.address() != null) this.address = new Address(request.address());
+        this.active = request.active();
+    }
 
     public void clientDesactive() {
         this.active = false;
     }
 
-    @PreUpdate @PrePersist
+    @PreUpdate
+    @PrePersist
     private void formatartelephone() {
         if (telephone.length() == 10) {
             telephone = String.format("(%s) %s-%s",

@@ -1,16 +1,40 @@
 package com.api.restfull.ecommerce.application.response;
 
-import com.api.restfull.ecommerce.application.dto.AdressDto;
+import com.api.restfull.ecommerce.application.dto.AddressDto;
+import com.api.restfull.ecommerce.domain.entity.Client;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public record ClientResponse(Long id,
-                             String name,
-                             String email,
-                             String cpf,
-                             LocalDate dateOfBirth,
-                             String telephone,
-                             Boolean active,
-                             AdressDto address) {
+public record ClientResponse(
+        Long id,
+        String name,
+        String email,
+        String cpf,
+        @JsonFormat(pattern = "dd/MM/yyyy")
+        LocalDate dateOfBirth,
+        String telephone,
+        Boolean active,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
+        LocalDateTime registrationDate,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
+        LocalDateTime lastUpdateDate,
+        AddressDto address) {
 
+    public ClientResponse(Client client) {
+        this(
+                client.getId(),
+                client.getName(),
+                client.getEmail(),
+                client.getCpf(),
+                client.getDateOfBirth(),
+                client.getTelephone(),
+                client.isActive(),
+                client.getRegistrationDate() != null ? client.getRegistrationDate() : LocalDateTime.now(),
+                client.getLastUpdateDate() != null ? client.getLastUpdateDate() : LocalDateTime.now(),
+                client.getAddress() != null ? new AddressDto(client.getAddress()) : null
+
+        );
+    }
 }

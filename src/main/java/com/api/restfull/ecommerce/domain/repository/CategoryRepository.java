@@ -11,13 +11,13 @@ import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    @Query("SELECT c FROM category c WHERE LOWER(c.name) = LOWER(:name)")
+    @Query("SELECT c FROM Category c WHERE LOWER(c.name) = LOWER(:name)")
     Optional<Category> findByName(@Param("name") String name);
 
-    @Query(value = "SELECT c FROM category c WHERE c.description = :description")
+    @Query(value = "SELECT c FROM Category c WHERE c.description = :description")
     List<Category> findByDescription(@Param("description") String description);
 
-    @Query("SELECT p FROM category p WHERE p.active = :active")
+    @Query("SELECT p FROM Category p WHERE p.active = :active")
     List<Category> findByActives(@Param("active") Boolean active);
 
 }
