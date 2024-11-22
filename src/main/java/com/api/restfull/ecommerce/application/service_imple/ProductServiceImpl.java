@@ -30,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryService categoryService;
     private final ProductRepository repository;
 
+    @Override
     public ProductResponse createProduct(ProductRequest request) {
         // Busca produtos com o mesmo nome
         List<Product> productsWithSameName = repository.findByNameDescriptionActive(request.name());
@@ -71,11 +72,22 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse updateProduct(ProductRequest request) {
         // Verifica se o product existe
         Optional<Product> productOptional = repository.findById(request.id());
+
+        //Valida se o ID existe.
         if (productOptional.isEmpty()) {
             throw new ResourceNotFoundException("product não encontrado com o ID: " + request.id());
         }
+
+        // Verifica se o nome do produto já existe em outra categoria
+        Optional<Product> existingProduct = repository.findByName(request.name());
+
+        // Valida se o nome existe em outra categoria
+        if (existingProduct.isPresent() && !existingProduct.get().getId().equals(existingProduct)) {
+            throw new BusinessRuleException("O nome do produto já está em uso por outra categoria.");
+        }
         // Verifica se a category existe
-        if (request.categoryId() != null) { // Apenas verifica se o ID da category foi fornecido
+        if (request.categoryId() != null) {
+            // Apenas verifica se o ID da category foi fornecido
             boolean categoryExists = categoryRepository.existsById(request.categoryId());
             if (!categoryExists) {
                 throw new ResourceNotFoundException("category não encontrada com o ID: " + request.categoryId());
