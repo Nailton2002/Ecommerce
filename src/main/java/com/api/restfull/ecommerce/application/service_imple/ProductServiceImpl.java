@@ -32,8 +32,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse createProduct(ProductRequest request) {
-        // Busca produtos com o mesmo nome
-        List<Product> productsWithSameName = repository.findByNameDescriptionActive(request.name());
+        // Busca produtos ativos com o mesmo nome e descrição já existe
+        List<Product> productsWithSameName = repository.findByNameActive(request.name());
 
         // Valida se existe um produto ativo com o mesmo nome e descrição
         boolean existsActiveProductWithSameDescription = productsWithSameName.stream().anyMatch(product ->
@@ -53,6 +53,36 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductResponse updateProduct(ProductRequest request) {
+        // Verifica se o produto existe
+        Product product = repository.findById(request.id())
+        .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com o ID: " + request.id()));
+
+        // Valida se outro produto com o mesmo nome e descrição já existe e está ativo
+        List<Product> productsWithSameName = repository.findByNameActive(request.name());
+        boolean existsActiveProductWithSameDescription = productsWithSameName.stream().anyMatch(existingProduct ->
+        existingProduct.getId() != request.id() && existingProduct.getDescription().equalsIgnoreCase(request.description()));
+
+        if (existsActiveProductWithSameDescription) {
+            throw new BusinessRuleException("Outro produto ativo com o mesmo nome e descrição já existe.");
+        }
+
+        // Verifica se a categoria fornecida existe, se foi alterada
+        if (request.categoryId() != null && !product.getCategory().getId().equals(request.categoryId())) {
+            Category category = categoryRepository.findById(request.categoryId()).orElseThrow(() -> new ResourceNotFoundException(
+            "Categoria não encontrada com o ID: " + request.categoryId()));
+            product.setCategory(category);
+        }
+        // Atualiza os dados do produto
+        product.updateProduct(request);
+        // Salva as alterações no banco
+        Product updatedProduct = repository.save(product);
+        // Retorna o produto atualizado
+        return new ProductResponse(updatedProduct);
+    }
+
+
+    @Override
     public ProductResponse getByIdProduct(Long id) {
         Product obj = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado! Id: " + id + ", Tipo: " + ProductResponse.class.getName()));
         return new ProductResponse(obj);
@@ -66,38 +96,6 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> productPage = repository.findAll(pageable);
         // Converte os products em ProductResponse
         return productPage.map(ProductResponse::new);
-    }
-
-    @Override
-    public ProductResponse updateProduct(ProductRequest request) {
-        // Verifica se o product existe
-        Optional<Product> productOptional = repository.findById(request.id());
-
-        //Valida se o ID existe.
-        if (productOptional.isEmpty()) {
-            throw new ResourceNotFoundException("product não encontrado com o ID: " + request.id());
-        }
-
-        // Verifica se o nome do produto já existe em outra categoria
-        Optional<Product> existingProduct = repository.findByName(request.name());
-
-        // Valida se o nome existe em outra categoria
-        if (existingProduct.isPresent() && !existingProduct.get().getId().equals(existingProduct)) {
-            throw new BusinessRuleException("O nome do produto já está em uso por outra categoria.");
-        }
-        // Verifica se a category existe
-        if (request.categoryId() != null) {
-            // Apenas verifica se o ID da category foi fornecido
-            boolean categoryExists = categoryRepository.existsById(request.categoryId());
-            if (!categoryExists) {
-                throw new ResourceNotFoundException("category não encontrada com o ID: " + request.categoryId());
-            }
-        }
-        // Atualiza o product
-        Product obj = productOptional.get();
-        obj.updateProduct(request);
-        Product productUpdate = repository.save(obj);
-        return new ProductResponse(productUpdate);
     }
 
     @Override

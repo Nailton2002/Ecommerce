@@ -22,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByName(@Param("name") String name);
 
     @Query("SELECT p FROM Product p WHERE LOWER(p.name) = LOWER(:name)")
-    List<Product> findByNameDescriptionActive(@Param("name") String name);
+    List<Product> findByNameActive(@Param("name") String name);
 
     @Query(value = "SELECT p FROM Product p WHERE p.description = :description")
     List<Product> findByDescription(@Param("description") String description);
