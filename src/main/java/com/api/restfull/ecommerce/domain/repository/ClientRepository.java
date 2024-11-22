@@ -29,4 +29,8 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     @Query("SELECT c FROM Client c WHERE c.cpf LIKE CONCAT(:cpf, '%')")
     Optional<Client> findByCpf(@Param("cpf") String cpf);
+
+    boolean existsByCpf(String cpf);
+
+    boolean existsByEmail(String email);
 }

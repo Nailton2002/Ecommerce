@@ -5,6 +5,7 @@ import com.api.restfull.ecommerce.application.response.ClientResponse;
 import com.api.restfull.ecommerce.application.service.ClientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@Slf4j
 @RestController
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -23,8 +25,15 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<ClientResponse> create(@Valid @RequestBody ClientRequest request) {
+        long startTime = System.currentTimeMillis();
+        log.info("Recebendo requisição: [method=POST, endpoint=/clients, body={}]", request);
+
         ClientResponse response = service.createClient(request);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.id()).toUri();
+
+        long executionTime = System.currentTimeMillis() - startTime;
+        log.info("Resposta enviada: [status=201, body={}, executionTime={}ms]", response, executionTime);
+
         return ResponseEntity.created(uri).body(response);
     }
 
@@ -52,6 +61,7 @@ public class ClientController {
     public ResponseEntity<List<ClientResponse>> findByDateOfBirthLike(@RequestParam String dateOfBirth) {
         return ResponseEntity.ok().body(service.findByDateOfBirthLikeClient(dateOfBirth));
     }
+
     @GetMapping("/actives")
     public ResponseEntity<List<ClientResponse>> getByStatus(@RequestParam(name = "active") Boolean active) {
         return ResponseEntity.ok(service.getByStatusClients(active));
