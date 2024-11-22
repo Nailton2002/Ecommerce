@@ -17,7 +17,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query(value = "SELECT c FROM Category c WHERE c.description = :description")
     List<Category> findByDescription(@Param("description") String description);
 
-    @Query("SELECT p FROM Category p WHERE p.active = :active")
+    @Query("SELECT c FROM Category c WHERE c.active = :active")
     List<Category> findByActives(@Param("active") Boolean active);
 
+    @Query("SELECT c FROM Category c WHERE LOWER(c.name) = LOWER(:name)")
+    List<Category> findByNameDescriptionActive(@Param("name") String name);
 }

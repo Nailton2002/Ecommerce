@@ -4,6 +4,7 @@ import com.api.restfull.ecommerce.application.request.CategoryRequest;
 import com.api.restfull.ecommerce.application.response.CategoryResponse;
 import com.api.restfull.ecommerce.application.service.CategoryService;
 import com.api.restfull.ecommerce.domain.entity.Category;
+import com.api.restfull.ecommerce.domain.entity.Product;
 import com.api.restfull.ecommerce.domain.exception.BusinessRuleException;
 import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundException;
 import com.api.restfull.ecommerce.domain.repository.CategoryRepository;
@@ -22,6 +23,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse saveCategory(CategoryRequest request) {
+        // Busca categoria com o mesmo nome
+        List<Category> catoriesWithSameName = repository.findByNameDescriptionActive(request.name());
+
+        // Valida se existe uma categoria ativo com o mesmo nome e descrição
+        boolean existsActiveCategoryWithSameDescription = catoriesWithSameName.stream().anyMatch(product ->
+        product.getActive() && product.getDescription().equalsIgnoreCase(request.description()));
+
+        if (existsActiveCategoryWithSameDescription) {
+            throw new BusinessRuleException("Categoria ativo com o mesmo nome e descrição já existe.");
+        }
         Category category = new Category(request);
         Category obj = repository.save(category);
         return new CategoryResponse(obj);
@@ -45,8 +56,10 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
         // Busca a categoria pelo ID
         Category category = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com o ID: " + id));
+
         // Verifica se o nome já existe em outra categoria
         Optional<Category> existingCategory = repository.findByName(request.name());
+
        // Valida se o nome existe em outra categoria
         if (existingCategory.isPresent() && !existingCategory.get().getId().equals(id)) {
             throw new BusinessRuleException("O nome da categoria já está em uso por outra categoria.");
