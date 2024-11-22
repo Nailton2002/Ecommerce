@@ -7,7 +7,7 @@ import com.api.restfull.ecommerce.domain.entity.Client;
 import com.api.restfull.ecommerce.domain.exception.BusinessRuleException;
 import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundException;
 import com.api.restfull.ecommerce.domain.repository.ClientRepository;
-import com.api.restfull.ecommerce.infra.util.ServiceClientUtil;
+import com.api.restfull.ecommerce.infra.util.ClientUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ import java.util.Optional;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository repository;
-    private final ServiceClientUtil clientUtil;
+    private final ClientUtil clientUtil;
     private static final Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
 
     @Override

@@ -22,4 +22,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("SELECT c FROM Category c WHERE LOWER(c.name) = LOWER(:name)")
     List<Category> findByNameDescriptionActive(@Param("name") String name);
+
+    @Query("SELECT COUNT(c) > 0 FROM Category c WHERE LOWER(c.name) = LOWER(:name) AND LOWER(c.description) = LOWER(:description) AND c.active = :active")
+    boolean existsByNameAndDescriptionAndActive(@Param("name") String name, @Param("description") String description, @Param("active") Boolean active);
+
+
 }

@@ -8,6 +8,7 @@ import com.api.restfull.ecommerce.domain.entity.Product;
 import com.api.restfull.ecommerce.domain.exception.BusinessRuleException;
 import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundException;
 import com.api.restfull.ecommerce.domain.repository.CategoryRepository;
+import com.api.restfull.ecommerce.infra.util.CategoryUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,18 +22,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository repository;
 
+    private final CategoryUtil categoryUtil;
+
     @Override
     public CategoryResponse saveCategory(CategoryRequest request) {
-        // Busca categoria com o mesmo nome
-        List<Category> catoriesWithSameName = repository.findByNameDescriptionActive(request.name());
 
-        // Valida se existe uma categoria ativo com o mesmo nome e descrição
-        boolean existsActiveCategoryWithSameDescription = catoriesWithSameName.stream().anyMatch(product ->
-        product.getActive() && product.getDescription().equalsIgnoreCase(request.description()));
+        // Verifica se já existe uma categoria ativa com o mesmo nome e descrição
+        categoryUtil.validationNameAndDescriptionAndActive(request);
 
-        if (existsActiveCategoryWithSameDescription) {
-            throw new BusinessRuleException("Categoria ativo com o mesmo nome e descrição já existe.");
-        }
         Category category = new Category(request);
         Category obj = repository.save(category);
         return new CategoryResponse(obj);
@@ -57,17 +54,15 @@ public class CategoryServiceImpl implements CategoryService {
         // Busca a categoria pelo ID
         Category category = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com o ID: " + id));
 
-        // Verifica se o nome já existe em outra categoria
-        Optional<Category> existingCategory = repository.findByName(request.name());
+        // Verifica se já existe uma categoria ativa com o mesmo nome e descrição
+        categoryUtil.validationNameAndDescriptionAndActive(request);
 
-       // Valida se o nome existe em outra categoria
-        if (existingCategory.isPresent() && !existingCategory.get().getId().equals(id)) {
-            throw new BusinessRuleException("O nome da categoria já está em uso por outra categoria.");
-        }
         // Atualiza os dados da categoria
         category.updateCategory(request);
+
         // Salva a categoria atualizada
         Category updatedCategory = repository.save(category);
+
         // Retorna a resposta com os dados atualizados
         return new CategoryResponse(updatedCategory);
     }
