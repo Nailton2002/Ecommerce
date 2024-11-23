@@ -11,10 +11,6 @@ public record ProductResponse(
         String name,
         // Preço unitário do product
         BigDecimal price,
-        CategoryResponse category,
-
-//      List<OrderResponse> order,
-
         // Descrição detalhada do product
         String description,
         // quantity disponível em estoque
@@ -25,7 +21,10 @@ public record ProductResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
         LocalDateTime creationDate,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-        LocalDateTime lastUpdateDate) {
+        LocalDateTime lastUpdateDate,
+        CategoryResponse category
+//      List<OrderResponse> order
+) {
 
     // Construtor que converte uma entidade `Product` para o DTO
     public ProductResponse(Product product) {
@@ -33,12 +32,12 @@ public record ProductResponse(
                 product.getId(),
                 product.getName(),
                 product.getPrice(),
-                product.getCategory() != null ? new CategoryResponse(product.getCategory()) : null,
                 product.getDescription(),
                 product.getQuantityStock(),
                 product.getActive(),
                 product.getCreationDate() != null ? product.getCreationDate() : LocalDateTime.now(),
-                product.getLastUpdateDate() != null ? product.getLastUpdateDate() : LocalDateTime.now()
+                product.getLastUpdateDate() != null ? product.getLastUpdateDate() : LocalDateTime.now(),
+                product.getCategory() != null ? new CategoryResponse(product.getCategory()) : null
         );
     }
 }

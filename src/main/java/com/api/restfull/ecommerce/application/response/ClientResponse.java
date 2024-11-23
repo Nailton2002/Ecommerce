@@ -30,7 +30,7 @@ public record ClientResponse(
                 client.getCpf(),
                 client.getDateOfBirth(),
                 client.getTelephone(),
-                client.isActive(),
+                client.getActive(),
                 client.getRegistrationDate() != null ? client.getRegistrationDate() : LocalDateTime.now(),
                 client.getLastUpdateDate() != null ? client.getLastUpdateDate() : LocalDateTime.now(),
                 client.getAddress() != null ? new AddressDto(client.getAddress()) : null

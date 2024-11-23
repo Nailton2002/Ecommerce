@@ -22,13 +22,14 @@ import java.util.List;
 @Entity(name = "Client")
 @Table(name = "tb_client")
 public class Client {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;
     private String cpf;
     private String telephone;
-    private boolean active;
+    private Boolean active;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfBirth;
     @Embedded
@@ -80,7 +81,7 @@ public class Client {
         if (request.dateOfBirth() != null) this.dateOfBirth = request.dateOfBirth();
         if (request.telephone() != null) this.telephone = request.telephone();
         if (request.address() != null) this.address = new Address(request.address());
-        this.active = request.active();
+        if (request.active() != null) this.active = request.active();
     }
 
     public void clientDesactive() {

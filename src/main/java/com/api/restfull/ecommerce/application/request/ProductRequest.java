@@ -14,23 +14,23 @@ public record ProductRequest(
         @NotNull(message = "O preço é obrigatório.")
         @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero.")
         BigDecimal price,
-        @NotNull
-        Long categoryId,
         @NotBlank
         String description,
         @NotNull
         Integer quantityStock,
-        Boolean active) {
+        Boolean active,
+        @NotNull
+        Long categoryId) {
 
     public ProductRequest(Product product) {
         this(
                 product.getId(),
                 product.getName(),
                 product.getPrice(),
-                product.getCategory() != null ? product.getCategory().getId() : null,
                 product.getDescription(),
                 product.getQuantityStock(),
-                product.getActive()
+                product.getActive(),
+                product.getCategory() != null ? product.getCategory().getId() : null
         );
     }
 

@@ -62,7 +62,7 @@ public class ClientServiceImpl implements ClientService {
         Client client = repository.findById(request.id()).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com o ID: " + request.id()));
 
         // validar a exclusividade do cliente
-        clientUtil.validateClientUniqueness(request);
+        clientUtil.validateClientUniquenessByUpdate(request, client.getId());
 
         // Verificação dos dados
         client.updateClient(request);
@@ -123,7 +123,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void deleteClient(Long id) {
         Client client = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com ID: " + id));
-        if (client.isActive()) {
+        if (client.getActive()) {
             throw new ResourceNotFoundException("Cliente ativo, não pode ser excluido!");
         }
         repository.delete(client);

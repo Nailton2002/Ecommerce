@@ -80,8 +80,7 @@ public class ProductServiceImpl implements ProductService {
         // Retorna o produto atualizado
         return new ProductResponse(updatedProduct);
     }
-
-
+    
     @Override
     public ProductResponse getByIdProduct(Long id) {
         Product obj = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado! Id: " + id + ", Tipo: " + ProductResponse.class.getName()));

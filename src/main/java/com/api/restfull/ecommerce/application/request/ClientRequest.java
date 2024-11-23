@@ -34,7 +34,7 @@ public record ClientRequest(
         @NotBlank(message = "telephone é obrigatório")
         @Pattern(regexp = "\\d{10,11}", message = "O telephone deve conter 10 ou 11 dígitos.")
         String telephone,
-        boolean active,
+        Boolean active,
         @Valid @NotNull(message = "Dados do endereço são obrigatórios")
         AddressDto address) {
 
@@ -46,7 +46,7 @@ public record ClientRequest(
                 client.getCpf(),
                 client.getDateOfBirth(),
                 client.getTelephone(),
-                client.isActive(),
+                client.getActive(),
                 client.getAddress() != null ? new AddressDto(client.getAddress()) : null
         );
     }
