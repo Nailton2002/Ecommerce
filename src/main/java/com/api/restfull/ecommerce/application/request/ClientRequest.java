@@ -38,17 +38,6 @@ public record ClientRequest(
         @Valid @NotNull(message = "Dados do endereço são obrigatórios")
         AddressDto address) {
 
-    public ClientRequest(Client client) {
-        this(
-                client.getId(),
-                client.getName(),
-                client.getEmail(),
-                client.getCpf(),
-                client.getDateOfBirth(),
-                client.getTelephone(),
-                client.getActive(),
-                client.getAddress() != null ? new AddressDto(client.getAddress()) : null
-        );
-    }
+
 }
 

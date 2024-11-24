@@ -48,21 +48,6 @@ public class Product {
         }
     }
 
-    public Product(ProductResponse response){
-        id = response.id();
-        name = response.name();
-        price = response.price();
-        description = response.description();
-        quantityStock = response.quantityStock();
-        active = response.active();
-        creationDate = response.creationDate() != null ? response.creationDate() : LocalDateTime.now();
-        lastUpdateDate = response.lastUpdateDate() != null ? response.lastUpdateDate() : LocalDateTime.now();
-        if(response.category() != null){
-            category = new Category();
-            category.setId(response.category().id());
-        }
-    }
-
     public void updateProduct(ProductRequest request) {
         if (request.name() != null) {
             this.name = request.name();

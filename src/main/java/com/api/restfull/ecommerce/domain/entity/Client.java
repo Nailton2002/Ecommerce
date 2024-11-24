@@ -32,14 +32,14 @@ public class Client {
     private Boolean active;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfBirth;
-    @Embedded
-    private Address address;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime registrationDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime lastUpdateDate;
     @OneToMany(mappedBy = "client")
     private List<Order> order;
+    @Embedded
+    private Address address;
 
     public Client(ClientRequest request) {
         this.name = request.name();
@@ -53,24 +53,6 @@ public class Client {
             this.setAddress(new Address(request.address()));
         } else {
             throw new IllegalArgumentException("O endereço não pode ser nulo.");
-        }
-    }
-
-    public Client(ClientResponse response) {
-        this.id = response.id();
-        this.name = response.name();
-        this.email = response.email();
-        this.cpf = response.cpf();
-        this.dateOfBirth = response.dateOfBirth();
-        this.telephone = response.telephone();
-        this.active = response.active();
-        this.registrationDate = response.registrationDate() != null ? response.registrationDate() : LocalDateTime.now();
-        this.lastUpdateDate = response.lastUpdateDate() != null ? response.lastUpdateDate() : LocalDateTime.now();
-        // Garante que o endereço só seja configurado se o response.address() não for nulo
-        if (response.address() != null) {
-            this.setAddress(new Address(response.address()));
-        } else {
-            this.setAddress(null); // Define como null explicitamente se não houver endereço
         }
     }
 

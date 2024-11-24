@@ -22,17 +22,17 @@ public record ProductRequest(
         @NotNull
         Long categoryId) {
 
-    public ProductRequest(Product product) {
-        this(
-                product.getId(),
-                product.getName(),
-                product.getPrice(),
-                product.getDescription(),
-                product.getQuantityStock(),
-                product.getActive(),
-                product.getCategory() != null ? product.getCategory().getId() : null
-        );
-    }
+//    public ProductRequest(Product product) {
+//        this(
+//                product.getId(),
+//                product.getName(),
+//                product.getPrice(),
+//                product.getDescription(),
+//                product.getQuantityStock(),
+//                product.getActive(),
+//                product.getCategory() != null ? product.getCategory().getId() : null
+//        );
+//    }
 
 }
 

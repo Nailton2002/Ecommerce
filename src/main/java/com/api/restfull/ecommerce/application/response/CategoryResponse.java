@@ -1,5 +1,6 @@
 package com.api.restfull.ecommerce.application.response;
 
+import com.api.restfull.ecommerce.application.request.CategoryRequest;
 import com.api.restfull.ecommerce.domain.entity.Category;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -16,11 +17,14 @@ public record CategoryResponse(
         LocalDateTime lastUpdateDate) {
 
     public CategoryResponse(Category category) {
-        this(category.getId(),
-             category.getName(),
-             category.getDescription(),
-             category.getActive(),
-             category.getCreationDate() != null ? category.getCreationDate() : LocalDateTime.now(),
-             category.getLastUpdateDate() != null ? category.getLastUpdateDate() : LocalDateTime.now());
+        this(
+                category.getId(),
+                category.getName(),
+                category.getDescription(),
+                category.getActive(),
+                category.getCreationDate() != null ? category.getCreationDate() : LocalDateTime.now(),
+                category.getLastUpdateDate() != null ? category.getLastUpdateDate() : LocalDateTime.now()
+        );
     }
+
 }

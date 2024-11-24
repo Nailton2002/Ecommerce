@@ -10,8 +10,5 @@ public record CategoryRequest(
         String description,
         Boolean active
 ) {
-    public CategoryRequest(Category category) {
-        this(category.getName(), category.getDescription(), category.getActive());
-    }
 
 }

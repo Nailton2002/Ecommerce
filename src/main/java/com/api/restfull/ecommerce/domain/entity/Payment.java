@@ -1,5 +1,7 @@
 package com.api.restfull.ecommerce.domain.entity;
 
+import com.api.restfull.ecommerce.application.response.OrderResponse;
+import com.api.restfull.ecommerce.application.response.PaymentResponse;
 import com.api.restfull.ecommerce.domain.enums.MethodPayment;
 import com.api.restfull.ecommerce.domain.enums.StatusPayment;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -20,18 +22,22 @@ import java.util.UUID;
 @Table(name = "tb_payment")
 public class Payment {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     // order associado ao payment
-    @ManyToOne @JoinColumn(name = "order_id")
+    @ManyToOne
+    @JoinColumn(name = "order_id")
     private Order order;
     // value sumOfItemsOfOrders do payment
     private BigDecimal value;
     // Status do payment (ex: PENDENTE, APROVADO, REJEITADO, CANCELADO)
-    @Column(name = "cancelado") @Enumerated(EnumType.STRING)
+    @Column(name = "cancelado")
+    @Enumerated(EnumType.STRING)
     private StatusPayment statusPayment;
     // Método de payment (ex: CARTAO_CREDITO, BOLETO, PIX)
-    @Column(name = "CARTAO_CREDITO") @Enumerated(EnumType.STRING)
+    @Column(name = "CARTAO_CREDITO")
+    @Enumerated(EnumType.STRING)
     private MethodPayment methodPayment;
     // Número de transação (gerado pelo processador de payment)
     @Column(unique = true, nullable = false)
@@ -51,4 +57,5 @@ public class Payment {
         // Gera um UUID e o atribui ao campo numberTransacao antes de salvar
         this.numberTransaction = UUID.randomUUID().toString();
     }
+
 }

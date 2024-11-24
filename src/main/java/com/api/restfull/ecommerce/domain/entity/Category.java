@@ -28,18 +28,9 @@ public class Category {
     private LocalDateTime lastUpdateDate;
 
     public Category(CategoryRequest request) {
-       name = request.name();
-       description = request.description();
-       active = true;
-    }
-
-    public Category(CategoryResponse response) {
-                id = response.id();
-                name = response.name();
-                active = response.active();
-                description = response.description();
-                creationDate = response.creationDate() != null ? response.creationDate() : LocalDateTime.now();
-                lastUpdateDate = response.lastUpdateDate() != null ? response.lastUpdateDate() : LocalDateTime.now();
+        name = request.name();
+        description = request.description();
+        active = true;
     }
 
     public void updateCategory(CategoryRequest request) {

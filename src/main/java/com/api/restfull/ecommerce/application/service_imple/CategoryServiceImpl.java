@@ -26,7 +26,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse saveCategory(CategoryRequest request) {
-
         // Verifica se já existe uma categoria ativa com o mesmo nome e descrição
         categoryUtil.validationNameAndDescriptionAndActive(request);
 
@@ -34,6 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category obj = repository.save(category);
         return new CategoryResponse(obj);
     }
+
 
     @Override
     public CategoryResponse findByIdCategory(Long id) {

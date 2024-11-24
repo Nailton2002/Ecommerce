@@ -1,5 +1,6 @@
 package com.api.restfull.ecommerce.domain.entity;
 
+import com.api.restfull.ecommerce.application.response.OrderItemResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,4 +29,6 @@ public class OrderItem {
     private BigDecimal unitPrice;
     // SubsumOfItemsOfOrders calculado (preço unitário * quantity)
     private BigDecimal subsumOfItemsOfOrders;
+
+
 }
