@@ -4,10 +4,12 @@ import com.api.restfull.ecommerce.application.dto.AddressDto;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Embeddable
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class Address {
@@ -34,7 +36,7 @@ public class Address {
         uf = addressDto.uf();
     }
 
-    public void updateInformation(AddressDto dto) {
+    public void updateAddress(AddressDto dto) {
         if (dto.neighborhood() != null) {
             this.neighborhood = dto.neighborhood();
         }

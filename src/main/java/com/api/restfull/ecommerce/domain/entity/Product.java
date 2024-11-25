@@ -36,6 +36,7 @@ public class Product {
     private List<Order> order;
 
     public Product(ProductRequest request){
+        id = request.id();
         name = request.name();
         price = request.price();
         description = request.description();

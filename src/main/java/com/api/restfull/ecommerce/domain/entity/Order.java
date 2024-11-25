@@ -1,9 +1,13 @@
 package com.api.restfull.ecommerce.domain.entity;
 
+import com.api.restfull.ecommerce.application.dto.AddressDto;
 import com.api.restfull.ecommerce.application.request.OrderRequest;
 import com.api.restfull.ecommerce.application.response.OrderResponse;
 import com.api.restfull.ecommerce.domain.enums.StatusOrder;
+import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundException;
 import com.api.restfull.ecommerce.domain.model.Address;
+import com.api.restfull.ecommerce.domain.repository.ClientRepository;
+import com.api.restfull.ecommerce.domain.repository.ProductRepository;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +16,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -37,8 +42,7 @@ public class Order {
     // Informações de payment
     @OneToMany(mappedBy = "order")
     private List<Payment> payment;
-    // Status do order (ex: PENDENTE, APROVADO, CANCELADO, FINALIZADO)
-    @Column(name = "cancelada")
+    @Column(name = "Pendente")
     @Enumerated(EnumType.STRING)
     private StatusOrder statusOrder;
     // sumOfItemsOfOrders calculado do order (cálculo dinâmico com base nos itens)
@@ -54,25 +58,33 @@ public class Order {
     // Endereço de entrega
     private Address addressDelivery;
 
+    // Construtor para mapear uma entidade OrderRequest para a entidade Order
     public Order(OrderRequest request) {
-        this.id = request.id();
-//        this.client = request.clientId() != null ? new Client(request.clientId()) : null;
-//        this.products = request.productIds() != null
-//                ? request.productIds().stream().map(Product::new).toList()
-//                : List.of();
-//        this.orderItens = request.orderItenIds() != null
-//                ? request.orderItenIds().stream().map(OrderItem::new).toList()
-//                : List.of();
-//        this.payment = request.paymentIds() != null
-//                ? request.paymentIds().stream().map(Payment::new).toList()
-//                : List.of();
-        this.statusOrder = request.statusOrder();
-        this.sumOfItemsOfOrders = request.sumOfItemsOfOrders();
+        // Criação do cliente diretamente com o ID, para não precissar usar outro construtor so com o ID
+        if (request.clientId() != null) {
+            this.client = new Client();
+            this.client.setId(request.clientId());
+        }
+        // Criação da lista de produtos diretamente com os IDs
+        if (request.productIds() != null) {
+            this.products = request.productIds().stream().map(id -> {
+                Product product = new Product();
+                product.setId(id);
+                return product;
+            }).toList();
+        } else {
+            this.products = List.of();
+        }
+        this.statusOrder = StatusOrder.valueOf(request.statusOrder() != null ? String.valueOf(request.statusOrder()) : "Status não definido");
         this.creationDate = request.creationDate() != null ? request.creationDate() : LocalDateTime.now();
-        this.expectedDeliveryDate = request.expectedDeliveryDate();
-//        this.lastUpdateDate = request.lastUpdateDate() != null ? request.lastUpdateDate() : LocalDateTime.now();
+        this.expectedDeliveryDate = request.expectedDeliveryDate() != null ? request.expectedDeliveryDate() : LocalDateTime.now();
         this.addressDelivery = request.addressDelivery() != null ? new Address(request.addressDelivery()) : null;
     }
 
-
+    public void updateOrder(OrderRequest request) {
+        if (request.statusOrder() != null) this.statusOrder = request.statusOrder();
+        if (request.lastUpdateDate() != null) this.lastUpdateDate = request.lastUpdateDate();
+        if (request.sumOfItemsOfOrders() != null) this.sumOfItemsOfOrders = request.sumOfItemsOfOrders();
+    }
 }
+

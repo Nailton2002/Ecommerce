@@ -24,8 +24,8 @@ public record ProductResponse(
         LocalDateTime creationDate,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
         LocalDateTime lastUpdateDate,
-        CategoryResponse category,
-        List<OrderResponse> order
+        CategoryResponse category
+//        List<OrderResponse> order
 ) {
 
     // Construtor que converte uma entidade `Product` para o DTO
@@ -39,8 +39,8 @@ public record ProductResponse(
                 product.getActive(),
                 product.getCreationDate() != null ? product.getCreationDate() : LocalDateTime.now(),
                 product.getLastUpdateDate() != null ? product.getLastUpdateDate() : LocalDateTime.now(),
-                product.getCategory() != null ? new CategoryResponse(product.getCategory()) : null,
-                product.getOrder() != null ? product.getOrder().stream().map(OrderResponse::new).toList() : List.of()
+                product.getCategory() != null ? new CategoryResponse(product.getCategory()) : null
+//                product.getOrder() != null ? product.getOrder().stream().map(OrderResponse::new).toList() : List.of()
                 );
     }
 }
