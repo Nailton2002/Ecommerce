@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -22,12 +23,10 @@ import java.util.UUID;
 @Table(name = "tb_payment")
 public class Payment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     // order associado ao payment
-    @ManyToOne
-    @JoinColumn(name = "order_id")
+    @ManyToOne @JoinColumn(name = "order_id")
     private Order order;
     // value sumOfItemsOfOrders do payment
     private BigDecimal value;
@@ -56,6 +55,29 @@ public class Payment {
     public void gerarnumberTransacao() {
         // Gera um UUID e o atribui ao campo numberTransacao antes de salvar
         this.numberTransaction = UUID.randomUUID().toString();
+    }
+
+    public BigDecimal calculateOrderTotal(List<OrderItem> items) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (OrderItem item : items) {
+            total = total.add(calculateSubSum(item.getUnitPrice(), item.getQuantity()));
+        }
+        return total;
+    }
+
+    /**
+     * Método auxiliar para calcular a soma parcial (subSum) dos itens.
+     *
+     * @param unitPrice o preço unitário do item
+     * @param quantity  a quantidade do item
+     * @return o total calculado (preço unitário * quantidade), ou BigDecimal.ZERO se um dos valores for nulo
+     */
+    private static BigDecimal calculateSubSum(BigDecimal unitPrice, Integer quantity) {
+        if (unitPrice != null && quantity != null) {
+            return unitPrice.multiply(BigDecimal.valueOf(quantity));
+        }
+        // Retorna 0 se valores forem inválidos
+        return BigDecimal.ZERO;
     }
 
 }

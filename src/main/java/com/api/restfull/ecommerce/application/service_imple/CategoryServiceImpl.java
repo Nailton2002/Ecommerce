@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse findByIdCategory(Long id) {
         Optional<Category> optionalCategory = repository.findById(id);
         return new CategoryResponse(optionalCategory.orElseThrow(() ->
-                new ResourceNotFoundException("Objeto não encontrado! Id: " + id + ", tipo: " + CategoryResponse.class.getName())));
+        new ResourceNotFoundException("Objeto não encontrado! Id: " + id + ", tipo: " + CategoryResponse.class.getName())));
     }
 
     @Override

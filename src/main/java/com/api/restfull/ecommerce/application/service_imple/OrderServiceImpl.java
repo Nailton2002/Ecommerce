@@ -44,8 +44,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // Busca e associa o cliente ao pedido
-        Client client = clientRepository.findById(request.clientId())
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com ID: " + request.clientId()));
+        Client client = clientRepository.findById(request.clientId()).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com ID: " + request.clientId()));
 
         // Valida se o cliente está ativo
         if (!client.getActive()) {

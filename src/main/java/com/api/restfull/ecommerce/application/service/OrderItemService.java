@@ -1,7 +1,6 @@
 package com.api.restfull.ecommerce.application.service;
 
 import com.api.restfull.ecommerce.application.request.OrderItemRequest;
-import com.api.restfull.ecommerce.application.request.OrderRequest;
 import com.api.restfull.ecommerce.application.response.OrderItemResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,8 @@ public interface OrderItemService {
     OrderItemResponse findByIdOrderItem(Long id);
 
     @Transactional
-    OrderItemResponse updateOrderItem(OrderRequest request);
+    OrderItemResponse updateOrderItem(OrderItemRequest request);
 
-    void deleteOrderItem(Long orderId);
+    @Transactional
+    void deleteOrderItem(Long id);
 }

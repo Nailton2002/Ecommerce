@@ -53,4 +53,11 @@ public class OrderItem {
                 ? this.unitPrice.multiply(BigDecimal.valueOf(this.quantity))
                 : BigDecimal.ZERO;
     }
+
+    public void updateOrdemItem(OrderItemRequest request) {
+        if (request.quantity() != null) this.quantity = request.quantity();
+        if (request.unitPrice() != null) this.unitPrice = request.unitPrice();
+        // Atualiza o subsumOfItemsOfOrders (cálculo dinâmico)
+        this.subsumOfItemsOfOrders = this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
+    }
 }
