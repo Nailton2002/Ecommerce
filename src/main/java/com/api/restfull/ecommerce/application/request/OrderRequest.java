@@ -36,10 +36,8 @@ public record OrderRequest(
         // Data prevista para entrega
         LocalDateTime expectedDeliveryDate,
         // Data de atualização para entrega
-         LocalDateTime lastUpdateDate
+        LocalDateTime lastUpdateDate
 ) {
-
-
 
 
 }

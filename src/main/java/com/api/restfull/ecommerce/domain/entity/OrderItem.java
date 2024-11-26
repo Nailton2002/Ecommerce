@@ -1,5 +1,6 @@
 package com.api.restfull.ecommerce.domain.entity;
 
+import com.api.restfull.ecommerce.application.request.OrderItemRequest;
 import com.api.restfull.ecommerce.application.response.OrderItemResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,5 +31,26 @@ public class OrderItem {
     // SubsumOfItemsOfOrders calculado (preço unitário * quantity)
     private BigDecimal subsumOfItemsOfOrders;
 
+    public OrderItem(OrderItemRequest request) {
+        id = request.id();
+        if (request.orderId() != null) {
+            this.order = new Order();
+            this.order.setId(request.id());
+        }
+        if (request.productId() != null) {
+            this.product = new Product();
+            this.product.setId(request.id());
+        }
+        quantity = request.quantity();
+        unitPrice = request.unitPrice();
+        subsumOfItemsOfOrders = request.subsumOfItemsOfOrders();
+        // Calcula o subtotal (evitando receber do request)
+    }
 
+    // Método para calcular o subtotal
+    private BigDecimal calculateSubTotal() {
+        return this.unitPrice != null && this.quantity != null
+                ? this.unitPrice.multiply(BigDecimal.valueOf(this.quantity))
+                : BigDecimal.ZERO;
+    }
 }
