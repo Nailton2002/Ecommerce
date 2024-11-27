@@ -1,11 +1,11 @@
-package com.api.restfull.ecommerce.application.service_imple;
+package com.api.restfull.ecommerce.application.service_impl;
 
-import com.api.restfull.ecommerce.application.request.CategoryRequest;
-import com.api.restfull.ecommerce.application.response.CategoryResponse;
+import com.api.restfull.ecommerce.application.request.category.CategoryRequest;
+import com.api.restfull.ecommerce.application.request.category.CategoryUpdateRequest;
+import com.api.restfull.ecommerce.application.response.category.CategoryListResponse;
+import com.api.restfull.ecommerce.application.response.category.CategoryResponse;
 import com.api.restfull.ecommerce.application.service.CategoryService;
 import com.api.restfull.ecommerce.domain.entity.Category;
-import com.api.restfull.ecommerce.domain.entity.Product;
-import com.api.restfull.ecommerce.domain.exception.BusinessRuleException;
 import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundException;
 import com.api.restfull.ecommerce.domain.repository.CategoryRepository;
 import com.api.restfull.ecommerce.infra.util.CategoryUtil;
@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse saveCategory(CategoryRequest request) {
         // Verifica se já existe uma categoria ativa com o mesmo nome e descrição
-        categoryUtil.validationNameAndDescriptionAndActive(request);
+        categoryUtil.validateOnSave(request);
 
         Category category = new Category(request);
         Category obj = repository.save(category);
@@ -36,10 +36,10 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public CategoryResponse findByIdCategory(Long id) {
+    public CategoryListResponse findByIdCategory(Long id) {
         Optional<Category> optionalCategory = repository.findById(id);
-        return new CategoryResponse(optionalCategory.orElseThrow(() ->
-        new ResourceNotFoundException("Objeto não encontrado! Id: " + id + ", tipo: " + CategoryResponse.class.getName())));
+        return new CategoryListResponse(optionalCategory.orElseThrow(() ->
+        new ResourceNotFoundException("Objeto não encontrado! Id: " + id + ", tipo: " + CategoryListResponse.class.getName())));
     }
 
     @Override
@@ -50,12 +50,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse updateCategory(Long id, CategoryRequest request) {
+    public CategoryResponse updateCategory(CategoryUpdateRequest request) {
         // Busca a categoria pelo ID
-        Category category = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com o ID: " + id));
+        Category category = repository.findById(request.id()).orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com o ID: " + request));
 
         // Verifica se já existe uma categoria ativa com o mesmo nome e descrição
-        categoryUtil.validationNameAndDescriptionAndActive(request);
+        categoryUtil.validateOnUpdate(request);
 
         // Atualiza os dados da categoria
         category.updateCategory(request);

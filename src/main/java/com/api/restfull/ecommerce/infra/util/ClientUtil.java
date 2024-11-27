@@ -1,7 +1,7 @@
 package com.api.restfull.ecommerce.infra.util;
 
 import com.api.restfull.ecommerce.application.request.ClientRequest;
-import com.api.restfull.ecommerce.application.service_imple.ClientServiceImpl;
+import com.api.restfull.ecommerce.application.service_impl.ClientServiceImpl;
 import com.api.restfull.ecommerce.domain.entity.Client;
 import com.api.restfull.ecommerce.domain.exception.BusinessRuleException;
 import com.api.restfull.ecommerce.domain.repository.ClientRepository;

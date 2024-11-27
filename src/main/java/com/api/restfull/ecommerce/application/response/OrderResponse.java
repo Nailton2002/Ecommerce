@@ -16,8 +16,7 @@ public record OrderResponse(
         LocalDateTime creationDate,
         LocalDateTime expectedDeliveryDate,
         ClientResponse client,
-        AddressDto  addressDelivery,
-        List<ProductResponse> products
+        AddressDto  addressDelivery
 ) {
 
     // Construtor para mapear uma entidade Order para o DTO
@@ -31,8 +30,7 @@ public record OrderResponse(
                 order.getExpectedDeliveryDate() != null ? order.getExpectedDeliveryDate() : LocalDateTime.now(),
                 order.getClient() != null ? new ClientResponse(order.getClient()) : null,
                 // Lógica para exibir endereço de entrega ou mensagem Lógica de validação encapsulada
-                validateAddress(order),
-                order.getProducts() != null ? order.getProducts().stream().map(ProductResponse::new).collect(Collectors.toList()) : List.of()
+                validateAddress(order)
         );
     }
 

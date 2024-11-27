@@ -22,22 +22,34 @@ import java.util.List;
 @Entity(name = "Client")
 @Table(name = "tb_client")
 public class Client {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false, unique = true)
     private String cpf;
+
+    @Column(nullable = false, unique = false)
     private String telephone;
+
+    @Column
     private Boolean active;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfBirth;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime registrationDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime lastUpdateDate;
+
     @OneToMany(mappedBy = "client")
     private List<Order> order;
+
     @Embedded
     private Address address;
 

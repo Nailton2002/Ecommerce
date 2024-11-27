@@ -1,7 +1,6 @@
-package com.api.restfull.ecommerce.application.service_imple;
+package com.api.restfull.ecommerce.application.service_impl;
 
 import com.api.restfull.ecommerce.application.request.OrderRequest;
-import com.api.restfull.ecommerce.application.response.ClientResponse;
 import com.api.restfull.ecommerce.application.response.OrderResponse;
 import com.api.restfull.ecommerce.application.service.OrderService;
 import com.api.restfull.ecommerce.domain.entity.Client;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
                 ).collect(Collectors.toList());
 
         // Associa os produtos ao pedido
-        order.setProducts(products);
+//        order.setProducts(products);
 
         // Salva o pedido no banco de dados
         Order savedOrder = repository.save(order);
@@ -142,10 +140,10 @@ public class OrderServiceImpl implements OrderService {
             throw new BusinessRuleException("Pedidos entregues ou em andamento não podem ser excluídos.");
         }
         // Restitui o estoque dos produtos do pedido
-        for (Product product : order.getProducts()) {
-            product.setQuantityStock(product.getQuantityStock() + 1); // Ajuste a lógica de restituição conforme necessário
-            productRepository.save(product);
-        }
+//        for (Product product : order.getProducts()) {
+//            product.setQuantityStock(product.getQuantityStock() + 1); // Ajuste a lógica de restituição conforme necessário
+//            productRepository.save(product);
+//        }
         // Registra log de exclusão (simulação)
         System.out.println("Pedido excluído: " + order.getId() + ", Data: " + LocalDateTime.now());
 

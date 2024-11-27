@@ -17,19 +17,29 @@ import java.math.BigDecimal;
 @Table(name = "tb_order_item")
 public class OrderItem {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne @JoinColumn(name = "order_id")
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
     private Order order;
+
     // product associado ao item do order
-    @ManyToOne @JoinColumn(name = "product_id")
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
     // quantity do product no order
+    @Column(nullable = false)
     private Integer quantity;
+
     // Preço unitário do product no momento da compra
+    @Column(nullable = false)
     private BigDecimal unitPrice;
+
     // SubsumOfItemsOfOrders calculado (preço unitário * quantity)
-    private BigDecimal subsumOfItemsOfOrders;
+    private BigDecimal sumOfQuantityOfPrice;
 
     public OrderItem(OrderItemRequest request) {
         id = request.id();
@@ -43,7 +53,7 @@ public class OrderItem {
         }
         quantity = request.quantity();
         unitPrice = request.unitPrice();
-        subsumOfItemsOfOrders = request.subsumOfItemsOfOrders();
+        sumOfQuantityOfPrice = request.subsumOfItemsOfOrders();
         // Calcula o subtotal (evitando receber do request)
     }
 
@@ -58,6 +68,6 @@ public class OrderItem {
         if (request.quantity() != null) this.quantity = request.quantity();
         if (request.unitPrice() != null) this.unitPrice = request.unitPrice();
         // Atualiza o subsumOfItemsOfOrders (cálculo dinâmico)
-        this.subsumOfItemsOfOrders = this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
+        this.sumOfQuantityOfPrice = this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
     }
 }

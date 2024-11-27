@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,35 +27,33 @@ import java.util.stream.Collectors;
 public class Order {
 
     // Identificador único do order
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     // client associado ao order
-    @ManyToOne
-    @JoinColumn(name = "client_id")
+    @ManyToOne @JoinColumn(name = "client_id", nullable = false)
     private Client client;
-    @ManyToMany
-    @JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<Product> products;
+
     // Conjunto de itens do order
     @OneToMany(mappedBy = "order")
-    private List<OrderItem> orderItens;
-    // Informações de payment
-    @OneToMany(mappedBy = "order")
-    private List<Payment> payment;
-    @Column(name = "Pendente")
-    @Enumerated(EnumType.STRING)
-    private StatusOrder statusOrder;
+    private List<OrderItem> orderItems;
+
     // sumOfItemsOfOrders calculado do order (cálculo dinâmico com base nos itens)
-    private Double sumOfItemsOfOrders;
+    @Column(nullable = false)
+    private BigDecimal totalAmount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusOrder statusOrder;
+
     // Datas de criação e última atualização do order
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime creationDate;
+
     // Data prevista para entrega
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime expectedDeliveryDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime lastUpdateDate;
+
     // Endereço de entrega
     private Address addressDelivery;
 
@@ -65,16 +64,7 @@ public class Order {
             this.client = new Client();
             this.client.setId(request.clientId());
         }
-        // Criação da lista de produtos diretamente com os IDs
-        if (request.productIds() != null) {
-            this.products = request.productIds().stream().map(id -> {
-                Product product = new Product();
-                product.setId(id);
-                return product;
-            }).toList();
-        } else {
-            this.products = List.of();
-        }
+
         this.statusOrder = StatusOrder.valueOf(request.statusOrder() != null ? String.valueOf(request.statusOrder()) : "Status não definido");
         this.creationDate = request.creationDate() != null ? request.creationDate() : LocalDateTime.now();
         this.expectedDeliveryDate = request.expectedDeliveryDate() != null ? request.expectedDeliveryDate() : LocalDateTime.now();
@@ -83,8 +73,7 @@ public class Order {
 
     public void updateOrder(OrderRequest request) {
         if (request.statusOrder() != null) this.statusOrder = request.statusOrder();
-        if (request.lastUpdateDate() != null) this.lastUpdateDate = request.lastUpdateDate();
-        if (request.sumOfItemsOfOrders() != null) this.sumOfItemsOfOrders = request.sumOfItemsOfOrders();
+
     }
 }
 

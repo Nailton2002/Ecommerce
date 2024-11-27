@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,21 +20,32 @@ import java.util.List;
 @Entity(name = "Product")
 @Table(name = "tb_product")
 public class Product {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
-    private BigDecimal price;
+
+    @Column
     private String description;
+
+    @Column(nullable = false)
+    private BigDecimal price;
+
+    @Column(nullable = false)
     private Integer quantityStock;
+
     private Boolean active;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime creationDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime lastUpdateDate;
-    @JsonIgnore @ManyToOne @JoinColumn(name = "category_id")
+
+    @JsonIgnore @ManyToOne @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-    @ManyToMany @JoinTable(name = "order_product", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private List<Order> order;
+
+    @ManyToMany @JoinTable(name = "order_item_product", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "order_item_id"))
+    private List<OrderItem> orderItems;
 
     public Product(ProductRequest request){
         id = request.id();

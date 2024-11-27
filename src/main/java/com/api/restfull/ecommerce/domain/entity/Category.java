@@ -1,14 +1,16 @@
 package com.api.restfull.ecommerce.domain.entity;
 
-import com.api.restfull.ecommerce.application.request.CategoryRequest;
-import com.api.restfull.ecommerce.application.response.CategoryResponse;
+import com.api.restfull.ecommerce.application.request.category.CategoryRequest;
+import com.api.restfull.ecommerce.application.request.category.CategoryUpdateRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -17,15 +19,25 @@ import java.time.LocalDateTime;
 @Table(name = "tb_category")
 public class Category {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String name;
+
+    @Column
     private String description;
+
+    @Column
     private Boolean active;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime creationDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime lastUpdateDate;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 
     public Category(CategoryRequest request) {
         name = request.name();
@@ -33,7 +45,10 @@ public class Category {
         active = true;
     }
 
-    public void updateCategory(CategoryRequest request) {
+    public void updateCategory(CategoryUpdateRequest request) {
+        if (request.id() != null) {
+            this.id = request.id();
+        }
         if (request.name() != null) {
             this.name = request.name();
         }

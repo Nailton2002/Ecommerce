@@ -19,7 +19,6 @@ public record ClientResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
         LocalDateTime registrationDate,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
-        LocalDateTime lastUpdateDate,
         AddressDto address) {
 
     public ClientResponse(Client client) {
@@ -32,7 +31,6 @@ public record ClientResponse(
                 client.getTelephone(),
                 client.getActive(),
                 client.getRegistrationDate() != null ? client.getRegistrationDate() : LocalDateTime.now(),
-                client.getLastUpdateDate() != null ? client.getLastUpdateDate() : LocalDateTime.now(),
                 client.getAddress() != null ? new AddressDto(client.getAddress()) : null
 
         );

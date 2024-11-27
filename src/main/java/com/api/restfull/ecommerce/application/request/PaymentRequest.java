@@ -12,16 +12,13 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record PaymentRequest(
+
         Long id,
-        OrderResponse order,
+        Long orderId,
         BigDecimal value,
-        @Column(name = "cancelado") @Enumerated(EnumType.STRING)
         StatusPayment statusPayment,
-        @Column(name = "CARTAO_CREDITO") @Enumerated(EnumType.STRING)
         MethodPayment methodPayment,
-        @Column(unique = true, nullable = false)
         String numberTransaction,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
         LocalDateTime dataPayment
 ) {
 }
