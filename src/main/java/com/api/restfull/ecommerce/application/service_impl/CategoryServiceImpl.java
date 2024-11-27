@@ -91,15 +91,15 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryResponse> findByDescriptionCategory(String description) {
+    public List<CategoryListResponse> findByDescriptionCategory(String description) {
         List<Category> categoryList = repository.findByDescription(description);
-        return categoryList.stream().map(CategoryResponse::new).toList();
+        return categoryList.stream().map(CategoryListResponse::new).toList();
     }
 
     @Override
-    public List<CategoryResponse> finByActivesCategory(Boolean active) {
+    public List<CategoryListResponse> finByActivesCategory(Boolean active) {
         List<Category> responseList = repository.findByActives(active);
-        return responseList.stream().map(CategoryResponse::new).toList();
+        return responseList.stream().map(CategoryListResponse::new).toList();
     }
 
 

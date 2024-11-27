@@ -37,19 +37,19 @@ public class CategoryController {
         return ResponseEntity.ok(service.findAllCategory());
     }
 
+    @GetMapping("/actives")
+    public ResponseEntity<List<CategoryListResponse>> finByActivesCategory(@RequestParam(name = "active") Boolean active) {
+        return ResponseEntity.ok(service.finByActivesCategory(active));
+    }
+
     @GetMapping("/descriptions")
-    public ResponseEntity<List<CategoryResponse>> findByDescriptionCategory(@RequestParam(name = "description") String description) {
+    public ResponseEntity<List<CategoryListResponse>> findByDescriptionCategory(@RequestParam(name = "description") String description) {
         return ResponseEntity.ok(service.findByDescriptionCategory(description));
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<CategoryListResponse> findByIdCategory(@PathVariable Long id) {
         return ResponseEntity.ok().body(service.findByIdCategory(id));
-    }
-
-    @GetMapping("/actives")
-    public ResponseEntity<List<CategoryResponse>> finByActivesCategory(@RequestParam(name = "active") Boolean active) {
-        return ResponseEntity.ok(service.finByActivesCategory(active));
     }
 
     @PutMapping(value = "/{id}")
@@ -67,4 +67,5 @@ public class CategoryController {
         service.deleteDesableCategory(id);
         return ResponseEntity.noContent().build();
     }
+
 }

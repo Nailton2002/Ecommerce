@@ -28,10 +28,10 @@ public interface CategoryService {
     CategoryResponse findByNameCategory(String name);
 
     @Transactional
-    List<CategoryResponse> findByDescriptionCategory(String description);
+    List<CategoryListResponse> findByDescriptionCategory(String description);
 
     @Transactional
-    List<CategoryResponse> finByActivesCategory(Boolean active);
+    List<CategoryListResponse> finByActivesCategory(Boolean active);
 
     @Transactional
     CategoryResponse desableCategory(Long id);
