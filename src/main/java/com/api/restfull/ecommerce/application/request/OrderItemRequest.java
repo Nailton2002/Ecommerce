@@ -1,7 +1,5 @@
 package com.api.restfull.ecommerce.application.request;
 
-import com.api.restfull.ecommerce.application.response.OrderResponse;
-import com.api.restfull.ecommerce.application.response.ProductResponse;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 

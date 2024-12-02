@@ -1,7 +1,6 @@
 package com.api.restfull.ecommerce.infra.util;
 
-import com.api.restfull.ecommerce.application.request.category.CategoryRequest;
-import com.api.restfull.ecommerce.application.request.category.CategoryUpdateRequest;
+import com.api.restfull.ecommerce.application.request.CategoryRequest;
 import com.api.restfull.ecommerce.application.service_impl.ClientServiceImpl;
 import com.api.restfull.ecommerce.domain.exception.BusinessRuleException;
 import com.api.restfull.ecommerce.domain.repository.CategoryRepository;
@@ -34,7 +33,7 @@ public class CategoryUtil {
      *
      * @param request a requisição contendo os dados da categoria
      */
-    public void validateOnUpdate(CategoryUpdateRequest request) {
+    public void validateOnUpdate(CategoryRequest request) {
         validateNameAndDescription(request.name(), request.description(), "Não pode ser atualizada, a categoria ativa com o mesmo nome e descrição já existe."
         );
     }

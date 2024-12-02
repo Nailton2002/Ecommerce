@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,4 +31,6 @@ public class Cart {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime creationDate;
 
+    public Cart(Object o, Client client, List<CartItem> items, BigDecimal reduce, LocalDateTime now) {
+    }
 }

@@ -1,7 +1,6 @@
 package com.api.restfull.ecommerce.domain.entity;
 
 import com.api.restfull.ecommerce.application.request.ProductRequest;
-import com.api.restfull.ecommerce.application.response.ProductResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -48,7 +46,6 @@ public class Product {
     private List<OrderItem> orderItems;
 
     public Product(ProductRequest request){
-        id = request.id();
         name = request.name();
         price = request.price();
         description = request.description();
@@ -62,6 +59,7 @@ public class Product {
     }
 
     public void updateProduct(ProductRequest request) {
+
         if (request.name() != null) {
             this.name = request.name();
         }

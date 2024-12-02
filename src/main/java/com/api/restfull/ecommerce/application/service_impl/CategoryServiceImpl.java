@@ -1,9 +1,7 @@
 package com.api.restfull.ecommerce.application.service_impl;
 
-import com.api.restfull.ecommerce.application.request.category.CategoryRequest;
-import com.api.restfull.ecommerce.application.request.category.CategoryUpdateRequest;
-import com.api.restfull.ecommerce.application.response.category.CategoryListResponse;
-import com.api.restfull.ecommerce.application.response.category.CategoryResponse;
+import com.api.restfull.ecommerce.application.request.CategoryRequest;
+import com.api.restfull.ecommerce.application.response.CategoryResponse;
 import com.api.restfull.ecommerce.application.service.CategoryService;
 import com.api.restfull.ecommerce.domain.entity.Category;
 import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundException;
@@ -36,10 +34,10 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public CategoryListResponse findByIdCategory(Long id) {
+    public CategoryResponse findByIdCategory(Long id) {
         Optional<Category> optionalCategory = repository.findById(id);
-        return new CategoryListResponse(optionalCategory.orElseThrow(() ->
-        new ResourceNotFoundException("Objeto não encontrado! Id: " + id + ", tipo: " + CategoryListResponse.class.getName())));
+        return new CategoryResponse(optionalCategory.orElseThrow(() ->
+        new ResourceNotFoundException("Objeto não encontrado! Id: " + id + ", tipo: " + CategoryResponse.class.getName())));
     }
 
     @Override
@@ -50,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse updateCategory(CategoryUpdateRequest request) {
+    public CategoryResponse updateCategory(CategoryRequest request) {
         // Busca a categoria pelo ID
         Category category = repository.findById(request.id()).orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com o ID: " + request));
 
@@ -91,15 +89,15 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryListResponse> findByDescriptionCategory(String description) {
+    public List<CategoryResponse> findByDescriptionCategory(String description) {
         List<Category> categoryList = repository.findByDescription(description);
-        return categoryList.stream().map(CategoryListResponse::new).toList();
+        return categoryList.stream().map(CategoryResponse::new).toList();
     }
 
     @Override
-    public List<CategoryListResponse> finByActivesCategory(Boolean active) {
+    public List<CategoryResponse> finByActivesCategory(Boolean active) {
         List<Category> responseList = repository.findByActives(active);
-        return responseList.stream().map(CategoryListResponse::new).toList();
+        return responseList.stream().map(CategoryResponse::new).toList();
     }
 
 

@@ -9,8 +9,8 @@ public record OrderItemResponse(
         Integer quantity,
         BigDecimal unitPrice,
         BigDecimal subsumOfItemsOfOrders,
-        ProductResponse product,
-        OrderResponse order
+        ProductResponse product
+//        OrderResponse order
 ) {
     public OrderItemResponse(OrderItem orderItem) {
         this(
@@ -19,8 +19,7 @@ public record OrderItemResponse(
                 orderItem.getUnitPrice(),
                 // Calcula subsumOfItemsOfOrders com base no unitPrice e quantity
                 calculateSubsum(orderItem.getUnitPrice(), orderItem.getQuantity()),
-                orderItem.getProduct() != null ? new ProductResponse(orderItem.getProduct()) : null,
-                orderItem.getOrder() != null ? new OrderResponse(orderItem.getOrder()) : null
+                orderItem.getProduct() != null ? new ProductResponse(orderItem.getProduct()) : null
         );
     }
     /**

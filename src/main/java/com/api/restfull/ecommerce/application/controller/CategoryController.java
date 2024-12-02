@@ -1,9 +1,7 @@
 package com.api.restfull.ecommerce.application.controller;
 
-import com.api.restfull.ecommerce.application.request.category.CategoryRequest;
-import com.api.restfull.ecommerce.application.request.category.CategoryUpdateRequest;
-import com.api.restfull.ecommerce.application.response.category.CategoryListResponse;
-import com.api.restfull.ecommerce.application.response.category.CategoryResponse;
+import com.api.restfull.ecommerce.application.request.CategoryRequest;
+import com.api.restfull.ecommerce.application.response.CategoryResponse;
 import com.api.restfull.ecommerce.application.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,22 +36,22 @@ public class CategoryController {
     }
 
     @GetMapping("/actives")
-    public ResponseEntity<List<CategoryListResponse>> finByActivesCategory(@RequestParam(name = "active") Boolean active) {
+    public ResponseEntity<List<CategoryResponse>> finByActivesCategory(@RequestParam(name = "active") Boolean active) {
         return ResponseEntity.ok(service.finByActivesCategory(active));
     }
 
     @GetMapping("/descriptions")
-    public ResponseEntity<List<CategoryListResponse>> findByDescriptionCategory(@RequestParam(name = "description") String description) {
+    public ResponseEntity<List<CategoryResponse>> findByDescriptionCategory(@RequestParam(name = "description") String description) {
         return ResponseEntity.ok(service.findByDescriptionCategory(description));
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<CategoryListResponse> findByIdCategory(@PathVariable Long id) {
+    public ResponseEntity<CategoryResponse> findByIdCategory(@PathVariable Long id) {
         return ResponseEntity.ok().body(service.findByIdCategory(id));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<CategoryResponse> updateCategory(@Valid @RequestBody CategoryUpdateRequest request) {
+    public ResponseEntity<CategoryResponse> updateCategory(@Valid @RequestBody CategoryRequest request) {
         return ResponseEntity.ok().body(service.updateCategory(request));
     }
 

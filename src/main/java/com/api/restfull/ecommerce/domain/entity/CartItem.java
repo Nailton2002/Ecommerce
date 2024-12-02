@@ -1,5 +1,8 @@
 package com.api.restfull.ecommerce.domain.entity;
 
+import com.api.restfull.ecommerce.application.request.CartItemRequest;
+import com.api.restfull.ecommerce.application.response.CartItemResponse;
+import com.api.restfull.ecommerce.application.response.CartResponse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,4 +31,16 @@ public class CartItem {
 
     @Column(nullable = false)
     private BigDecimal totalPrice;
+
+    public CartItem(CartItemResponse response){
+        
+        if (response.productId() != null){
+            this.product = new Product();
+            this.product.setId(response.productId());
+        }
+        this.quantity = response.quantity();
+        this.totalPrice = response.totalPrice();
+        
+    }
+
 }

@@ -1,11 +1,8 @@
 package com.api.restfull.ecommerce.application.controller;
 
 import com.api.restfull.ecommerce.application.request.OrderRequest;
-import com.api.restfull.ecommerce.application.request.ProductRequest;
 import com.api.restfull.ecommerce.application.response.OrderResponse;
-import com.api.restfull.ecommerce.application.response.ProductResponse;
 import com.api.restfull.ecommerce.application.service.OrderService;
-import com.api.restfull.ecommerce.domain.entity.Order;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")

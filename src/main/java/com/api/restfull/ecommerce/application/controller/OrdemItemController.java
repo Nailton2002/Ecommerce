@@ -27,25 +27,26 @@ public class OrdemItemController {
     @PostMapping
     public ResponseEntity<OrderItemResponse> saveOrderItem(@RequestBody OrderItemRequest request) {
 
-        long startTime = System.currentTimeMillis();
-        logger.info("Recebendo requisição: [method=POST, endpoint=/order-items, body={}]", request);
-
-        try {
-            OrderItemResponse response = service.saveOrderItem(request);
-            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.id()).toUri();
-
-            long executionTime = System.currentTimeMillis() - startTime;
-            logger.info("Resposta enviada: [status=201, body={}, executionTime={}ms]", response, executionTime);
-
-            return ResponseEntity.created(uri).body(response);
-
-        } catch (ResourceNotFoundExceptionLogger ex) {
-            logger.error("Erro ao criar Item do Pedido: {}", ex.getMessage(), ex);
-            throw ex;
-        } catch (ExceptionLogger ex) {
-            logger.error("Erro inesperado ao criar Item do Pedido: {}", ex.getMessage(), ex);
-            throw ex;
-        }
+//        long startTime = System.currentTimeMillis();
+//        logger.info("Recebendo requisição: [method=POST, endpoint=/order-items, body={}]", request);
+//
+//        try {
+//            OrderItemResponse response = service.saveOrderItem(request);
+//            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.id()).toUri();
+//
+//            long executionTime = System.currentTimeMillis() - startTime;
+//            logger.info("Resposta enviada: [status=201, body={}, executionTime={}ms]", response, executionTime);
+//
+//            return ResponseEntity.created(uri).body(response);
+//
+//        } catch (ResourceNotFoundExceptionLogger ex) {
+//            logger.error("Erro ao criar Item do Pedido: {}", ex.getMessage(), ex);
+//            throw ex;
+//        } catch (ExceptionLogger ex) {
+//            logger.error("Erro inesperado ao criar Item do Pedido: {}", ex.getMessage(), ex);
+//            throw ex;
+//        }
+        return null;
     }
 
     @GetMapping
@@ -65,34 +66,36 @@ public class OrdemItemController {
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderItemResponse> findByIdOrderItem(@PathVariable Long id) {
-        logger.info("Recebendo requisição para buscar Item do Pedido pelo ID: [method=GET, endpoint=/order-items, body={}] {}", id);
-        try {
-            logger.info("Requisição concluída com sucesso: Item encontrado ID={}", service.findByIdOrderItem(id).id());
-            return ResponseEntity.ok(service.findByIdOrderItem(id));
-        } catch (ResourceNotFoundExceptionLogger ex) {
-            logger.error("Erro ao buscar Item do Pedido:  [status=200, body={}", ex.getMessage(), ex);
-            throw ex;
-        } catch (ExceptionLogger ex) {
-            logger.error("Erro inesperado ao buscar Item do Pedido: {}", ex.getMessage(), ex);
-            throw ex;
-        }
+//        logger.info("Recebendo requisição para buscar Item do Pedido pelo ID: [method=GET, endpoint=/order-items, body={}] {}", id);
+//        try {
+//            logger.info("Requisição concluída com sucesso: Item encontrado ID={}", service.findByIdOrderItem(id).id());
+//            return ResponseEntity.ok(service.findByIdOrderItem(id));
+//        } catch (ResourceNotFoundExceptionLogger ex) {
+//            logger.error("Erro ao buscar Item do Pedido:  [status=200, body={}", ex.getMessage(), ex);
+//            throw ex;
+//        } catch (ExceptionLogger ex) {
+//            logger.error("Erro inesperado ao buscar Item do Pedido: {}", ex.getMessage(), ex);
+//            throw ex;
+//        }
+        return null;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<OrderItemResponse> updateOrderItem(@RequestBody OrderItemRequest request) {
-
-        logger.info("Recebendo requisição para atualizar Item do Pedido: [method=PUT, endpoint=/order-items, body={}], ID={}, Dados={}", request);
-        try {
-            OrderItemResponse response = service.updateOrderItem(request);
-            logger.info("Item do Pedido atualizado com sucesso: [status=200, body={}, ID={}", response.id());
-            return ResponseEntity.ok().body(response);
-        } catch (ResourceNotFoundExceptionLogger ex) {
-            logger.error("Erro ao atualizar Item do Pedido: {}", ex.getMessage(), ex);
-            throw ex; // A exceção será tratada pelo ExceptionHandler
-        } catch (ExceptionLogger ex) {
-            logger.error("Erro inesperado ao atualizar Item do Pedido: {}", ex.getMessage(), ex);
-            throw ex;
-        }
+//
+//        logger.info("Recebendo requisição para atualizar Item do Pedido: [method=PUT, endpoint=/order-items, body={}], ID={}, Dados={}", request);
+//        try {
+//            OrderItemResponse response = service.updateOrderItem(request);
+//            logger.info("Item do Pedido atualizado com sucesso: [status=200, body={}, ID={}", response.id());
+//            return ResponseEntity.ok().body(response);
+//        } catch (ResourceNotFoundExceptionLogger ex) {
+//            logger.error("Erro ao atualizar Item do Pedido: {}", ex.getMessage(), ex);
+//            throw ex; // A exceção será tratada pelo ExceptionHandler
+//        } catch (ExceptionLogger ex) {
+//            logger.error("Erro inesperado ao atualizar Item do Pedido: {}", ex.getMessage(), ex);
+//            throw ex;
+//        }
+        return null;
     }
 
     @DeleteMapping("/{id}")

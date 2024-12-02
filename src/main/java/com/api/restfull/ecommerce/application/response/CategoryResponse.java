@@ -1,4 +1,4 @@
-package com.api.restfull.ecommerce.application.response.category;
+package com.api.restfull.ecommerce.application.response;
 
 import com.api.restfull.ecommerce.domain.entity.Category;
 import com.fasterxml.jackson.annotation.JsonFormat;

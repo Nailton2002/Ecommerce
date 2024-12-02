@@ -1,7 +1,7 @@
 package com.api.restfull.ecommerce.application.service_impl;
 
 import com.api.restfull.ecommerce.application.request.ProductRequest;
-import com.api.restfull.ecommerce.application.response.category.CategoryListResponse;
+import com.api.restfull.ecommerce.application.response.CategoryResponse;
 import com.api.restfull.ecommerce.application.response.ProductResponse;
 import com.api.restfull.ecommerce.application.service.CategoryService;
 import com.api.restfull.ecommerce.application.service.ProductService;
@@ -98,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponse> getAllByParamProducts(Long id_cat) {
-        CategoryListResponse response = categoryService.findByIdCategory(id_cat);
+        CategoryResponse response = categoryService.findByIdCategory(id_cat);
         List<Product> productdList = repository.findByCategory(response.id());
         List<ProductResponse> responseList = productdList.stream().map(ProductResponse::new).collect(Collectors.toList());
         return responseList;

@@ -1,7 +1,6 @@
 package com.api.restfull.ecommerce.domain.entity;
 
-import com.api.restfull.ecommerce.application.request.category.CategoryRequest;
-import com.api.restfull.ecommerce.application.request.category.CategoryUpdateRequest;
+import com.api.restfull.ecommerce.application.request.CategoryRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -45,10 +44,8 @@ public class Category {
         active = true;
     }
 
-    public void updateCategory(CategoryUpdateRequest request) {
-        if (request.id() != null) {
-            this.id = request.id();
-        }
+    public void updateCategory(CategoryRequest request) {
+
         if (request.name() != null) {
             this.name = request.name();
         }

@@ -33,7 +33,7 @@ public interface ProductService {
     List<ProductResponse> searchByName(String name);
 
     @Transactional
-   ProductResponse getByNameProduct(String name);
+    ProductResponse getByNameProduct(String name);
 
     @Transactional
     List<ProductResponse> getByDescriptionProduct(String description);

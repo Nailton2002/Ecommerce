@@ -24,7 +24,7 @@ public class ClientController {
     private final ClientService service;
 
     @PostMapping
-    public ResponseEntity<ClientResponse> create(@Valid @RequestBody ClientRequest request) {
+    public ResponseEntity<ClientResponse> create(@RequestBody @Valid ClientRequest request) {
         long startTime = System.currentTimeMillis();
         log.info("Recebendo requisição: [method=POST, endpoint=/clients, body={}]", request);
 

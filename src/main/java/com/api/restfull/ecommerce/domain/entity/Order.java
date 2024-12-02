@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,8 +73,9 @@ public class Order {
     }
 
     public void updateOrder(OrderRequest request) {
-        if (request.statusOrder() != null) this.statusOrder = request.statusOrder();
+//        if (request.statusOrder() != null) this.statusOrder = request.statusOrder();
 
     }
+
 }
 

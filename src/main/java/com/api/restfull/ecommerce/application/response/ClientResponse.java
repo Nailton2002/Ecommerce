@@ -18,7 +18,6 @@ public record ClientResponse(
         Boolean active,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
         LocalDateTime registrationDate,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
         AddressDto address) {
 
     public ClientResponse(Client client) {
