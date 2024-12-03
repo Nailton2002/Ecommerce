@@ -1,6 +1,6 @@
-package com.api.restfull.ecommerce.application.response;
+package com.api.restfull.ecommerce.application.response.product;
 
-import com.api.restfull.ecommerce.application.dto.AddressDto;
+import com.api.restfull.ecommerce.application.response.category.CategoryResponse;
 import com.api.restfull.ecommerce.domain.entity.Product;
 
 import java.math.BigDecimal;
@@ -9,17 +9,26 @@ import java.time.LocalDateTime;
 public record ProductResponse(
 
         Long id,
+
         String name,
-        // Preço unitário do product
-        BigDecimal price,
+
         // Descrição detalhada do product
         String description,
+
+        // Preço unitário do product
+        BigDecimal price,
+
         // quantity disponível em estoque
         Integer quantityStock,
+
         // Status do product (active/inactive)
         Boolean active,
-        CategoryResponse category,
-        LocalDateTime creationDate
+
+        //Data da criação do produto
+        LocalDateTime creationDate,
+
+        CategoryResponse category
+
 ) {
 
     // Construtor que converte uma entidade `Product` para o DTO
@@ -27,12 +36,12 @@ public record ProductResponse(
         this(
                 product.getId(),
                 product.getName(),
-                product.getPrice(),
                 product.getDescription(),
+                product.getPrice(),
                 product.getQuantityStock(),
                 product.getActive(),
-                product.getCategory() != null ? new CategoryResponse(product.getCategory()) : null,
-                product.getCreationDate() != null ? product.getCreationDate() : LocalDateTime.now()
+                product.getCreationDate() != null ? product.getCreationDate() : LocalDateTime.now(),
+                product.getCategory() != null ? new CategoryResponse(product.getCategory()) : null
                 );
     }
 }
