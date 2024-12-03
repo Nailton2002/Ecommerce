@@ -1,7 +1,9 @@
 package com.api.restfull.ecommerce.application.controller;
 
-import com.api.restfull.ecommerce.application.request.ProductRequest;
-import com.api.restfull.ecommerce.application.response.ProductResponse;
+import com.api.restfull.ecommerce.application.request.product.ProductRequest;
+import com.api.restfull.ecommerce.application.request.product.ProductUpRequest;
+import com.api.restfull.ecommerce.application.response.product.ProductListResponse;
+import com.api.restfull.ecommerce.application.response.product.ProductResponse;
 import com.api.restfull.ecommerce.application.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,24 +24,24 @@ public class ProductController {
     private final ProductService service;
 
     @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
-        ProductResponse response = service.createProduct(request);
+    public ResponseEntity<ProductListResponse> createProduct(@Valid @RequestBody ProductRequest request) {
+        ProductListResponse response = service.createProduct(request);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.id()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateProduct(@Valid @RequestBody ProductRequest request) {
+    public ResponseEntity<ProductListResponse> updateProduct(@Valid @RequestBody ProductUpRequest request) {
         return ResponseEntity.ok(service.updateProduct(request));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getByIdProduct(@PathVariable Long id) {
+    public ResponseEntity<ProductListResponse> getByIdProduct(@PathVariable Long id) {
         return ResponseEntity.ok(service.getByIdProduct(id));
     }
 
     @GetMapping("/names")
-    public ResponseEntity<ProductResponse> getByNameProduct(@RequestParam(name = "name") String name) {
+    public ResponseEntity<ProductListResponse> getByNameProduct(@RequestParam(name = "name") String name) {
         return ResponseEntity.ok(service.getByNameProduct(name));
     }
 
@@ -86,17 +88,17 @@ public class ProductController {
 
     //BUSCA POR productS RELACIONADOS A category.
     @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<List<ProductResponse>> getAllByIdCategory(@PathVariable Long categoryId) {
+    public ResponseEntity<List<ProductListResponse>> getAllByIdCategory(@PathVariable Long categoryId) {
         return ResponseEntity.ok().body(service.getAllByParamProducts(categoryId));
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<ProductResponse>> getAllByParamCategory(@RequestParam(value = "category", defaultValue = "0") Long id_cat) {
+    public ResponseEntity<List<ProductListResponse>> getAllByParamCategory(@RequestParam(value = "category", defaultValue = "0") Long id_cat) {
         return ResponseEntity.ok().body(service.getAllByParamProducts(id_cat));
     }
 
     @GetMapping("/categories/names")
-    public ResponseEntity<List<ProductResponse>> getAllByParamNameCategory(@RequestParam(value = "category", defaultValue = "0") String namecategory) {
+    public ResponseEntity<List<ProductListResponse>> getAllByParamNameCategory(@RequestParam(value = "category", defaultValue = "0") String namecategory) {
         return ResponseEntity.ok().body(service.getAllByParamNameProducts(namecategory));
     }
 

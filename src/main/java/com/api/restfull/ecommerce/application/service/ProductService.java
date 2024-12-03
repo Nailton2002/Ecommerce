@@ -1,7 +1,9 @@
 package com.api.restfull.ecommerce.application.service;
 
-import com.api.restfull.ecommerce.application.request.ProductRequest;
-import com.api.restfull.ecommerce.application.response.ProductResponse;
+import com.api.restfull.ecommerce.application.request.product.ProductRequest;
+import com.api.restfull.ecommerce.application.request.product.ProductUpRequest;
+import com.api.restfull.ecommerce.application.response.product.ProductListResponse;
+import com.api.restfull.ecommerce.application.response.product.ProductResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -12,28 +14,28 @@ import java.util.List;
 public interface ProductService {
 
     @Transactional
-    ProductResponse createProduct(ProductRequest request);
+    ProductListResponse createProduct(ProductRequest request);
 
     @Transactional
-    ProductResponse getByIdProduct(Long id);
+    ProductListResponse getByIdProduct(Long id);
 
     @Transactional
     Page<ProductResponse> getAllPagedProducts(int page, int size);
 
     @Transactional
-    ProductResponse updateProduct(ProductRequest request);
+    ProductListResponse updateProduct(ProductUpRequest request);
 
     @Transactional
-    List<ProductResponse> getAllByParamProducts(Long id_cat);
+    List<ProductListResponse> getAllByParamProducts(Long id_cat);
 
     @Transactional
-    List<ProductResponse> getAllByParamNameProducts(String namecategory);
+    List<ProductListResponse> getAllByParamNameProducts(String namecategory);
 
     @Transactional
     List<ProductResponse> searchByName(String name);
 
     @Transactional
-    ProductResponse getByNameProduct(String name);
+    ProductListResponse getByNameProduct(String name);
 
     @Transactional
     List<ProductResponse> getByDescriptionProduct(String description);

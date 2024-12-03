@@ -1,12 +1,10 @@
 package com.api.restfull.ecommerce.domain.exception;
 
-import org.springframework.dao.NonTransientDataAccessException;
-
-public class DataIntegrityViolationException extends NonTransientDataAccessException {
+public class DataIntegrityValidationException extends RuntimeException{
 
     private static final long serialVersionUID = 1L;
 
-    public DataIntegrityViolationException(String msg) {
+    public DataIntegrityValidationException(String msg) {
         super(msg);
 
     }

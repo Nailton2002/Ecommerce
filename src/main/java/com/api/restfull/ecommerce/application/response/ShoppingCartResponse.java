@@ -1,5 +1,6 @@
 package com.api.restfull.ecommerce.application.response;
 
+import com.api.restfull.ecommerce.application.response.product.ProductResponse;
 import com.api.restfull.ecommerce.domain.enums.StatusOrder;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;

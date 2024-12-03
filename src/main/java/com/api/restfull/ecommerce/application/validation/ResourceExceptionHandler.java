@@ -1,20 +1,15 @@
 package com.api.restfull.ecommerce.application.validation;
 
-import com.api.restfull.ecommerce.application.service.OrderItemService;
 import com.api.restfull.ecommerce.domain.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
@@ -61,6 +56,14 @@ public class ResourceExceptionHandler {
 	public ResponseEntity<String> handleGeneralException(ExceptionLogger ex) {
 		logger.error("Erro inesperado: {}", ex.getMessage(), ex);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno no servidor.");
+	}
+
+	@ExceptionHandler(DataIntegrityValidationException.class)
+	public ResponseEntity<StandardError> resourceNotFound(DataIntegrityValidationException e, HttpServletRequest request) {
+		String error = "Data Integrity Violation Exception";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
 	}
 
 

@@ -7,24 +7,22 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record ProductRequest(
+public record ProductUpRequest(
 
         Long id,
 
         @NotBlank
         String name,
 
-        @NotBlank
+        @NotNull
         String description,
 
         @NotNull
         Integer quantityStock,
 
-        @NotNull(message = "O preço é obrigatório.")
-        @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero.")
+        @NotNull
         BigDecimal price,
 
-        @Column(nullable = true)
         Boolean active,
 
         @NotNull

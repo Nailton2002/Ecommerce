@@ -1,6 +1,7 @@
 package com.api.restfull.ecommerce.domain.entity;
 
-import com.api.restfull.ecommerce.application.request.ProductRequest;
+import com.api.restfull.ecommerce.application.request.product.ProductRequest;
+import com.api.restfull.ecommerce.application.request.product.ProductUpRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -22,7 +23,7 @@ public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column
@@ -34,9 +35,10 @@ public class Product {
     @Column(nullable = false)
     private Integer quantityStock;
 
+    @Column
     private Boolean active;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+    @Column
     private LocalDateTime creationDate;
 
     @JsonIgnore @ManyToOne @JoinColumn(name = "category_id", nullable = false)
@@ -45,12 +47,14 @@ public class Product {
     @ManyToMany @JoinTable(name = "order_item_product", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "order_item_id"))
     private List<OrderItem> orderItems;
 
+
     public Product(ProductRequest request){
         name = request.name();
         price = request.price();
         description = request.description();
         quantityStock = request.quantityStock();
         active = true;
+        creationDate = LocalDateTime.now();
         // Se categoryId estiver presente no request, cria a associação com category
         if (request.categoryId() != null) {
             this.category = new Category();
@@ -58,7 +62,7 @@ public class Product {
         }
     }
 
-    public void updateProduct(ProductRequest request) {
+    public void updateProduct(ProductUpRequest request) {
 
         if (request.name() != null) {
             this.name = request.name();

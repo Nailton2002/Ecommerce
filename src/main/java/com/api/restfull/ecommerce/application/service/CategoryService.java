@@ -1,7 +1,9 @@
 package com.api.restfull.ecommerce.application.service;
 
-import com.api.restfull.ecommerce.application.request.CategoryRequest;
-import com.api.restfull.ecommerce.application.response.CategoryResponse;
+import com.api.restfull.ecommerce.application.request.category.CategoryRequest;
+import com.api.restfull.ecommerce.application.request.category.CategoryUpRequest;
+import com.api.restfull.ecommerce.application.response.category.CategoryListResponse;
+import com.api.restfull.ecommerce.application.response.category.CategoryResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +16,13 @@ public interface CategoryService {
     CategoryResponse saveCategory(CategoryRequest request);
 
     @Transactional
-    CategoryResponse findByIdCategory(Long id);
+    CategoryListResponse findByIdCategory(Long id);
 
     @Transactional
     List<CategoryResponse> findAllCategory();
 
     @Transactional
-    CategoryResponse updateCategory(CategoryRequest request);
+    CategoryResponse updateCategory(CategoryUpRequest request);
 
     @Transactional
     CategoryResponse findByNameCategory(String name);
