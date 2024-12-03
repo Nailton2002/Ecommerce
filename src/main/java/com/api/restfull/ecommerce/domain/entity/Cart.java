@@ -1,6 +1,5 @@
 package com.api.restfull.ecommerce.domain.entity;
 
-import com.api.restfull.ecommerce.domain.enums.StatusOrder;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,18 +18,18 @@ import java.util.List;
 @Table(name = "tb_cart")
 public class Cart {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne @JoinColumn(name = "client_id", nullable = false)
-    private Client client;
+    @OneToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    private List<CartItem> items = new ArrayList<>();
+    private List<CartItem> items;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime creationDate;
 
-    public Cart(Object o, Client client, List<CartItem> items, BigDecimal reduce, LocalDateTime now) {
-    }
 }

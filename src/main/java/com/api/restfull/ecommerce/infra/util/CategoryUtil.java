@@ -2,11 +2,10 @@ package com.api.restfull.ecommerce.infra.util;
 
 import com.api.restfull.ecommerce.application.request.category.CategoryRequest;
 import com.api.restfull.ecommerce.application.request.category.CategoryUpRequest;
-import com.api.restfull.ecommerce.application.service_impl.ClientServiceImpl;
+import com.api.restfull.ecommerce.application.service_impl.CustomerServiceImpl;
 import com.api.restfull.ecommerce.domain.exception.BusinessRuleException;
 import com.api.restfull.ecommerce.domain.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class CategoryUtil {
 
     private final CategoryRepository repository;
-    private static final Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
     /**
      * Validação ao salvar uma nova categoria.

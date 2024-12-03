@@ -1,14 +1,11 @@
 package com.api.restfull.ecommerce.domain.entity;
 
-import com.api.restfull.ecommerce.application.dto.AddressDto;
-import com.api.restfull.ecommerce.application.request.ClientRequest;
-import com.api.restfull.ecommerce.application.response.ClientResponse;
+import com.api.restfull.ecommerce.application.request.customer.CustomerRequest;
+import com.api.restfull.ecommerce.application.request.customer.CustomerUpRequest;
 import com.api.restfull.ecommerce.domain.model.Address;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,9 +16,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Client")
-@Table(name = "tb_client")
-public class Client {
+@Entity(name = "Customer")
+@Table(name = "tb_customer")
+public class Customer {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,13 +44,17 @@ public class Client {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime registrationDate;
 
-    @OneToMany(mappedBy = "client")
-    private List<Order> order;
-
     @Embedded
     private Address address;
 
-    public Client(ClientRequest request) {
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Cart cart;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Order> order;
+
+    public Customer(CustomerRequest request) {
+
         this.name = request.name();
         this.email = request.email();
         this.cpf = request.cpf();
@@ -68,7 +69,8 @@ public class Client {
         }
     }
 
-    public void updateClient(ClientRequest request) {
+    public void updateCustomer(CustomerUpRequest request) {
+
         if (request.name() != null) this.name = request.name();
         if (request.email() != null) this.email = request.email();
         if (request.cpf() != null) this.cpf = request.cpf();
@@ -78,7 +80,7 @@ public class Client {
         if (request.active() != null) this.active = request.active();
     }
 
-    public void clientDesactive() {
+    public void customerDesactive() {
         this.active = false;
     }
 

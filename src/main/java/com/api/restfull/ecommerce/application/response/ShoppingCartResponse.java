@@ -1,5 +1,6 @@
 package com.api.restfull.ecommerce.application.response;
 
+import com.api.restfull.ecommerce.application.response.customer.CustomerResponse;
 import com.api.restfull.ecommerce.application.response.product.ProductResponse;
 import com.api.restfull.ecommerce.domain.enums.StatusOrder;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public record ShoppingCartResponse(
         Long id,
-        ClientResponse client,
+        CustomerResponse client,
         List<ProductResponse> products,
         Double sumOfItemsOfOrders,
         @Column(name = "cancelada") @Enumerated(EnumType.STRING)

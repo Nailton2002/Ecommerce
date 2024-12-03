@@ -1,13 +1,8 @@
 package com.api.restfull.ecommerce.domain.entity;
 
-import com.api.restfull.ecommerce.application.dto.AddressDto;
 import com.api.restfull.ecommerce.application.request.OrderRequest;
-import com.api.restfull.ecommerce.application.response.OrderResponse;
 import com.api.restfull.ecommerce.domain.enums.StatusOrder;
-import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundException;
 import com.api.restfull.ecommerce.domain.model.Address;
-import com.api.restfull.ecommerce.domain.repository.ClientRepository;
-import com.api.restfull.ecommerce.domain.repository.ProductRepository;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,9 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -31,9 +24,9 @@ public class Order {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // client associado ao order
-    @ManyToOne @JoinColumn(name = "client_id", nullable = false)
-    private Client client;
+    // customer associado ao order
+    @ManyToOne @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     // Conjunto de itens do order
     @OneToMany(mappedBy = "order")
@@ -62,8 +55,8 @@ public class Order {
     public Order(OrderRequest request) {
         // Criação do cliente diretamente com o ID, para não precissar usar outro construtor so com o ID
         if (request.clientId() != null) {
-            this.client = new Client();
-            this.client.setId(request.clientId());
+            this.customer = new Customer();
+            this.customer.setId(request.clientId());
         }
 
         this.statusOrder = StatusOrder.valueOf(request.statusOrder() != null ? String.valueOf(request.statusOrder()) : "Status não definido");

@@ -1,10 +1,11 @@
 package com.api.restfull.ecommerce.infra.util;
 
-import com.api.restfull.ecommerce.application.request.ClientRequest;
-import com.api.restfull.ecommerce.application.service_impl.ClientServiceImpl;
-import com.api.restfull.ecommerce.domain.entity.Client;
+import com.api.restfull.ecommerce.application.request.customer.CustomerRequest;
+import com.api.restfull.ecommerce.application.request.customer.CustomerUpRequest;
+import com.api.restfull.ecommerce.application.service_impl.CustomerServiceImpl;
+import com.api.restfull.ecommerce.domain.entity.Customer;
 import com.api.restfull.ecommerce.domain.exception.BusinessRuleException;
-import com.api.restfull.ecommerce.domain.repository.ClientRepository;
+import com.api.restfull.ecommerce.domain.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -16,12 +17,12 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ClientUtil {
+public class CustomerUtil {
 
-    private final ClientRepository repository;
-    private static final Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class);
+    private final CustomerRepository repository;
+    private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
-    public void validateClientUniqueness(ClientRequest request){
+    public void validateCustomerUniqueness(CustomerRequest request){
 
         // Verifica se o CPF já existe no banco de dados
         if (repository.existsByCpf(request.cpf())) {
@@ -38,21 +39,26 @@ public class ClientUtil {
         logger.info("");
     }
 
-    public void validateClientUniquenessByUpdate(ClientRequest request, Long currentClientId) {
+    public void validateCustomerUniquenessByUpdate(CustomerUpRequest request) {
+
         // Verifica se o CPF já existe em outro cliente
-        Optional<Client> clientWithSameCpf = repository.findByCpf(request.cpf());
-        if (clientWithSameCpf.isPresent() && !clientWithSameCpf.get().getId().equals(currentClientId)) {
+        Optional<Customer> clientWithSameCpf = repository.findByCpf(request.cpf());
+
+        if (clientWithSameCpf.isPresent() && !clientWithSameCpf.get().getId().equals(request.id())) {
+
             log.error("Tentativa de atualização com CPF já existente: {}", request.cpf());
             throw new BusinessRuleException("Já existe um cliente com este CPF: " + request.cpf());
         }
 
         // Verifica se o email já existe em outro cliente
-        Optional<Client> clientWithSameEmail = repository.findByEmail(request.email());
-        if (clientWithSameEmail.isPresent() && !clientWithSameEmail.get().getId().equals(currentClientId)) {
+        Optional<Customer> clientWithSameEmail = repository.findByEmail(request.email());
+
+        if (clientWithSameEmail.isPresent() && !clientWithSameEmail.get().getId().equals(request.id())) {
+
             log.error("Tentativa de atualização com e-mail já existente: {}", request.email());
             throw new BusinessRuleException("Já existe um cliente com este e-mail: " + request.email());
         }
 
-        log.info("Validação de exclusividade concluída com sucesso para cliente ID: {}", currentClientId);
+        log.info("Validação de exclusividade concluída com sucesso para cliente ID: {}", request.id());
     }
 }

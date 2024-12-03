@@ -1,9 +1,7 @@
 package com.api.restfull.ecommerce.application.controller;
 
 import com.api.restfull.ecommerce.application.request.CartRequest;
-import com.api.restfull.ecommerce.application.request.ClientRequest;
 import com.api.restfull.ecommerce.application.response.CartResponse;
-import com.api.restfull.ecommerce.application.response.ClientResponse;
 import com.api.restfull.ecommerce.application.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
