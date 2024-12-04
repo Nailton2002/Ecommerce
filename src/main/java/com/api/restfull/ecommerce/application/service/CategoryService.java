@@ -31,7 +31,7 @@ public interface CategoryService {
     List<CategoryResponse> findByDescriptionCategory(String description);
 
     @Transactional
-    List<CategoryResponse> finByActivesCategory(Boolean active);
+    List<CategoryResponse> findByActivesCategory(Boolean active);
 
     @Transactional
     CategoryResponse desableCategory(Long id);
