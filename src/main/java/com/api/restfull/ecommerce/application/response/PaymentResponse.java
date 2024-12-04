@@ -1,9 +1,5 @@
 package com.api.restfull.ecommerce.application.response;
 
-import com.api.restfull.ecommerce.domain.entity.Payment;
-import com.api.restfull.ecommerce.domain.enums.MethodPayment;
-import com.api.restfull.ecommerce.domain.enums.StatusPayment;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

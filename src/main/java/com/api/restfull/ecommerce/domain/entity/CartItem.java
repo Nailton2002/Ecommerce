@@ -43,4 +43,10 @@ public class CartItem {
         
     }
 
+    public CartItem(Cart cart, Product product, Integer quantity) {
+        this.cart = cart;
+        this.product = product;
+        this.quantity = quantity;
+        this.totalPrice = product.getPrice().multiply(BigDecimal.valueOf(quantity));
+    }
 }

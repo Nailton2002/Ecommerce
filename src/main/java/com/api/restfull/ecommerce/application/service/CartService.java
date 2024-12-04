@@ -1,5 +1,6 @@
 package com.api.restfull.ecommerce.application.service;
 
+import com.api.restfull.ecommerce.application.request.CartItemRequest;
 import com.api.restfull.ecommerce.application.request.CartRequest;
 import com.api.restfull.ecommerce.application.response.CartResponse;
 import jakarta.transaction.Transactional;
@@ -11,15 +12,10 @@ public interface CartService {
     CartResponse createCart(CartRequest request);
 
     @Transactional
-    CartResponse getByIdCart(Long id);
+    CartResponse addItemToCart(Long cartId, CartItemRequest request);
 
     @Transactional
-    Page<CartResponse> getAllPagedCarts(int page, int size);
+    CartResponse removeItemToCart(Long cartId, CartItemRequest request);
 
-    @Transactional
-    CartResponse updateCart(CartRequest request);
-
-    @Transactional
-    void deleteCart(Long id);
 
 }

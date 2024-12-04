@@ -1,40 +1,27 @@
 package com.api.restfull.ecommerce.application.response;
 
 import com.api.restfull.ecommerce.application.response.product.ProductResponse;
+import com.api.restfull.ecommerce.domain.entity.Order;
 import com.api.restfull.ecommerce.domain.entity.OrderItem;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public record OrderItemResponse(
-        Long id,
+
+        String productName,
         Integer quantity,
-        BigDecimal unitPrice,
-        BigDecimal subsumOfItemsOfOrders,
-        ProductResponse product
-//        OrderResponse order
+        BigDecimal totalPrice
+
 ) {
-    public OrderItemResponse(OrderItem orderItem) {
-        this(
-                orderItem.getId(),
+    public static OrderItemResponse fromOrderItemToResponse(OrderItem orderItem) {
+
+        return new OrderItemResponse(
+                orderItem.getProduct().getName(),
                 orderItem.getQuantity(),
-                orderItem.getUnitPrice(),
-                // Calcula subsumOfItemsOfOrders com base no unitPrice e quantity
-                calculateSubsum(orderItem.getUnitPrice(), orderItem.getQuantity()),
-                orderItem.getProduct() != null ? new ProductResponse(orderItem.getProduct()) : null
+                orderItem.getTotalPrice()
+
         );
     }
-    /**
-     * Método auxiliar para calcular o subsumOfItemsOfOrders.
-     *
-     * @param unitPrice o preço unitário do item
-     * @param quantity  a quantidade do item
-     * @return o total calculado (preço unitário * quantidade), ou null se um dos valores for nulo
-     */
-    private static BigDecimal calculateSubsum(BigDecimal unitPrice, Integer quantity) {
-        if (unitPrice != null && quantity != null) {
-            return unitPrice.multiply(BigDecimal.valueOf(quantity));
-        }
-        // Retorna 0 se valores forem inválidos
-        return BigDecimal.ZERO;
-    }
 }
+

@@ -21,54 +21,60 @@ import java.util.List;
 public class Order {
 
     // Identificador único do order
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // customer associado ao order
-    @ManyToOne @JoinColumn(name = "customer_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     // Conjunto de itens do order
-    @OneToMany(mappedBy = "order")
-    private List<OrderItem> orderItems;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> items;
 
     // sumOfItemsOfOrders calculado do order (cálculo dinâmico com base nos itens)
     @Column(nullable = false)
-    private BigDecimal totalAmount;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private StatusOrder statusOrder;
+    private BigDecimal total;
 
     // Datas de criação e última atualização do order
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private LocalDateTime creationDate;
 
-    // Data prevista para entrega
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-    private LocalDateTime expectedDeliveryDate;
+    //    @Enumerated(EnumType.STRING)
+//    @Column(nullable = false)
+//    private StatusOrder statusOrder;
 
-    // Endereço de entrega
-    private Address addressDelivery;
+//    // Data prevista para entrega
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+//    private LocalDateTime expectedDeliveryDate;
+//
+//    // Endereço de entrega
+//    private Address addressDelivery;
+
+
+    public Order(Customer customer, List<OrderItem> items) {
+        this.customer = customer;
+        this.items = items;
+        this.total = items.stream().map(OrderItem::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        this.creationDate = LocalDateTime.now();
+    }
 
     // Construtor para mapear uma entidade OrderRequest para a entidade Order
-    public Order(OrderRequest request) {
-        // Criação do cliente diretamente com o ID, para não precissar usar outro construtor so com o ID
-        if (request.clientId() != null) {
-            this.customer = new Customer();
-            this.customer.setId(request.clientId());
-        }
+//    public Order(OrderRequest request) {
+//        // Criação do cliente diretamente com o ID, para não precissar usar outro construtor so com o ID
+//        if (request.clientId() != null) {
+//            this.customer = new Customer();
+//            this.customer.setId(request.clientId());
+//        }
+//
+////        this.statusOrder = StatusOrder.valueOf(request.statusOrder() != null ? String.valueOf(request.statusOrder()) : "Status não definido");
+//        this.creationDate = request.creationDate() != null ? request.creationDate() : LocalDateTime.now();
+//        this.expectedDeliveryDate = request.expectedDeliveryDate() != null ? request.expectedDeliveryDate() : LocalDateTime.now();
+//        this.addressDelivery = request.addressDelivery() != null ? new Address(request.addressDelivery()) : null;
+//    }
 
-        this.statusOrder = StatusOrder.valueOf(request.statusOrder() != null ? String.valueOf(request.statusOrder()) : "Status não definido");
-        this.creationDate = request.creationDate() != null ? request.creationDate() : LocalDateTime.now();
-        this.expectedDeliveryDate = request.expectedDeliveryDate() != null ? request.expectedDeliveryDate() : LocalDateTime.now();
-        this.addressDelivery = request.addressDelivery() != null ? new Address(request.addressDelivery()) : null;
-    }
-
-    public void updateOrder(OrderRequest request) {
-//        if (request.statusOrder() != null) this.statusOrder = request.statusOrder();
-
-    }
 
 }
 

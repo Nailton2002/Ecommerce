@@ -36,38 +36,46 @@ public class OrderItem {
 
     // Preço unitário do product no momento da compra
     @Column(nullable = false)
-    private BigDecimal unitPrice;
+    private BigDecimal totalPrice;
 
     // SubsumOfItemsOfOrders calculado (preço unitário * quantity)
-    private BigDecimal sumOfQuantityOfPrice;
+//    private BigDecimal sumOfQuantityOfPrice;
 
-    public OrderItem(OrderItemRequest request) {
-        id = request.id();
-        if (request.orderId() != null) {
-            this.order = new Order();
-            this.order.setId(request.id());
-        }
-        if (request.productId() != null) {
-            this.product = new Product();
-            this.product.setId(request.id());
-        }
-        quantity = request.quantity();
-        unitPrice = request.unitPrice();
-        sumOfQuantityOfPrice = request.subsumOfItemsOfOrders();
-        // Calcula o subtotal (evitando receber do request)
-    }
-
-    // Método para calcular o subtotal
-    private BigDecimal calculateSubTotal() {
-        return this.unitPrice != null && this.quantity != null
-                ? this.unitPrice.multiply(BigDecimal.valueOf(this.quantity))
-                : BigDecimal.ZERO;
-    }
-
-    public void updateOrdemItem(OrderItemRequest request) {
-        if (request.quantity() != null) this.quantity = request.quantity();
-        if (request.unitPrice() != null) this.unitPrice = request.unitPrice();
-        // Atualiza o subsumOfItemsOfOrders (cálculo dinâmico)
-        this.sumOfQuantityOfPrice = this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
+    public OrderItem(Order order, Product product, Integer quantity) {
+        this.order = order;
+        this.product = product;
+        this.quantity = quantity;
+        this.totalPrice = product.getPrice().multiply(BigDecimal.valueOf(quantity));
     }
 }
+
+//    public OrderItem(OrderItemRequest request) {
+//        id = request.id();
+//        if (request.orderId() != null) {
+//            this.order = new Order();
+//            this.order.setId(request.id());
+//        }
+//        if (request.productId() != null) {
+//            this.product = new Product();
+//            this.product.setId(request.id());
+//        }
+//        quantity = request.quantity();
+//        unitPrice = request.unitPrice();
+//        sumOfQuantityOfPrice = request.subsumOfItemsOfOrders();
+//        // Calcula o subtotal (evitando receber do request)
+//    }
+
+    // Método para calcular o subtotal
+//    private BigDecimal calculateSubTotal() {
+//        return this.totalPrice != null && this.quantity != null
+//                ? this.totalPrice.multiply(BigDecimal.valueOf(this.quantity))
+//                : BigDecimal.ZERO;
+//    }
+
+//    public void updateOrdemItem(OrderItemRequest request) {
+//        if (request.quantity() != null) this.quantity = request.quantity();
+//        if (request.unitPrice() != null) this.totalPrice = request.unitPrice();
+        // Atualiza o subsumOfItemsOfOrders (cálculo dinâmico)
+//        this.sumOfQuantityOfPrice = this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
+//    }
+//}
