@@ -47,11 +47,11 @@ public class CustomerController {
             return ResponseEntity.created(uri).body(response);
 
         } catch (ResourceNotFoundExceptionLogger ex) {
-            logger.warn("Cliente não encontrado: [status=404, message={}]", ex.getMessage(), ex);
+            logger.warn("Recurso não encontrado: [status=404, message={}]", ex.getMessage(), ex);
             throw ex;
 
         } catch (ExceptionLogger ex) {
-            logger.error("Erro inesperado: [message={}]", ex.getMessage(), ex);
+            logger.error("Erro inesperado ao criar produto: [message={}]", ex.getMessage(), ex);
             throw ex;
 
         } catch (Exception ex) {

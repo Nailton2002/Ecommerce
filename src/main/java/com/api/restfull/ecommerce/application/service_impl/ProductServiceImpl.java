@@ -11,10 +11,13 @@ import com.api.restfull.ecommerce.domain.entity.Category;
 import com.api.restfull.ecommerce.domain.entity.Product;
 import com.api.restfull.ecommerce.domain.exception.BusinessRuleException;
 import com.api.restfull.ecommerce.domain.exception.DataIntegrityValidationException;
+import com.api.restfull.ecommerce.domain.exception.ExceptionLogger;
 import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundException;
 import com.api.restfull.ecommerce.domain.repository.CategoryRepository;
 import com.api.restfull.ecommerce.domain.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +32,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CustomerServiceImpl.class);
+
     private final CategoryRepository categoryRepository;
     private final CategoryService categoryService;
     private final ProductRepository repository;
@@ -36,32 +41,54 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductListResponse createProduct(ProductRequest request) {
 
-        // Busca produtos ativos com o mesmo nome e descrição já existe
-        List<Product> productsWithSameName = repository.findByNameActive(request.name());
-
-        // Valida se existe um produto ativo com o mesmo nome e descrição
-        boolean existsActiveProductWithSameDescription = productsWithSameName.stream().anyMatch(product ->
-                product.getActive() && product.getDescription().equalsIgnoreCase(request.description()));
-
-        if (existsActiveProductWithSameDescription) {
-            throw new BusinessRuleException("Produto ativo com o mesmo nome e descrição já existe.");
-        }
+        logger.info("Iniciando criação do produto: [name={}, categoryId={}]", request.name(), request.categoryId());
 
         try {
+            // Busca produtos ativos com o mesmo nome
+            List<Product> productsWithSameName = repository.findByNameActive(request.name());
 
-            // Busca a categoria e cria o produto
+            // Valida se existe um produto ativo com o mesmo nome e descrição
+            boolean existsActiveProductWithSameDescription = productsWithSameName.stream().anyMatch(product ->
+                    product.getActive() && product.getDescription().equalsIgnoreCase(request.description()));
+
+            if (existsActiveProductWithSameDescription) {
+                throw new BusinessRuleException("Produto ativo com o mesmo nome e descrição já existe.");
+            }
+
+            // Busca a categoria associada ao produto
             Category category = categoryRepository.findById(request.categoryId()).orElseThrow(
                     () -> new ResourceNotFoundException("Categoria não encontrada para o ID: " + request.categoryId()));
 
+            // Cria o produto com os dados do request e associa a categoria
             Product product = new Product(request);
             product.setCategory(category);
+
+            // Salva o produto no banco de dados
             Product savedProduct = repository.save(product);
+
+            logger.info("Produto criado com sucesso: [id={}, name={}, category={}]",
+                    savedProduct.getId(), savedProduct.getName(), category.getName());
+
             return new ProductListResponse(savedProduct);
 
         } catch (DataIntegrityViolationException ex) {
+            logger.error("Erro de integridade ao criar produto: {}", ex.getMessage(), ex);
             throw new DataIntegrityValidationException("O nome do produto já existe.");
+
+        } catch (BusinessRuleException ex) {
+            logger.warn("Regra de negócio violada ao criar produto: {}", ex.getMessage(), ex);
+            throw ex;
+
+        } catch (ExceptionLogger ex) {
+            logger.error("Erro inesperado ao salvar produto: {}", ex.getMessage(), ex);
+            throw ex;
+
+        } catch (Exception ex) {
+            logger.error("Erro genérico ao salvar produto: {}", ex.getMessage(), ex);
+            throw new RuntimeException("Erro ao processar a criação do produto.", ex);
         }
     }
+
 
     @Override
     public ProductListResponse updateProduct(ProductUpRequest request) {
