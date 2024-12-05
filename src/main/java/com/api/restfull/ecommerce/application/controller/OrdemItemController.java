@@ -32,7 +32,7 @@
 //
 //        try {
 //            OrderItemResponse response = service.saveOrderItem(request);
-//            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.id()).toUri();
+//            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response()).toUri();
 //
 //            long executionTime = System.currentTimeMillis() - startTime;
 //            logger.info("Resposta enviada: [status=201, body={}, executionTime={}ms]", response, executionTime);
@@ -68,7 +68,7 @@
 //    public ResponseEntity<OrderItemResponse> findByIdOrderItem(@PathVariable Long id) {
 //        logger.info("Recebendo requisição para buscar Item do Pedido pelo ID: [method=GET, endpoint=/order-items, body={}] {}", id);
 //        try {
-//            logger.info("Requisição concluída com sucesso: Item encontrado ID={}", service.findByIdOrderItem(id).id());
+//            logger.info("Requisição concluída com sucesso: Item encontrado ID={}", service.findByIdOrderItem(id));
 //            return ResponseEntity.ok(service.findByIdOrderItem(id));
 //        } catch (ResourceNotFoundExceptionLogger ex) {
 //            logger.error("Erro ao buscar Item do Pedido:  [status=200, body={}", ex.getMessage(), ex);

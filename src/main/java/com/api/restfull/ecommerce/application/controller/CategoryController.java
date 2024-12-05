@@ -44,7 +44,7 @@ public class CategoryController {
             return ResponseEntity.created(uri).body(response);
 
         } catch (ResourceNotFoundExceptionLogger ex) {
-            logger.error("Erro ao criar uma categoria: {}", ex.getMessage(), ex);
+            logger.warn("Erro ao criar uma categoria: {}", ex.getMessage(), ex);
             throw ex;
 
         } catch (ExceptionLogger ex) {
@@ -59,14 +59,14 @@ public class CategoryController {
         logger.info("Recebendo requisição: [method=GET, endpoint=/categories, body={}]");
 
         try {
-            logger.info("Requisição concluída com sucesso: Item encontrado ID={}", service.findByNameCategory(name));
+            logger.info("Requisição concluída com sucesso: Categoria encontrado ID={}", service.findByNameCategory(name));
             if (name != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(List.of(service.findByNameCategory(name)));
             }
             return ResponseEntity.status(HttpStatus.OK).body(service.findAllCategory());
 
         } catch (ResourceNotFoundExceptionLogger ex) {
-            logger.error("Erro ao buscar categoria:  [status=200, body={}", ex.getMessage(), ex);
+            logger.warn("Erro ao buscar categoria:  [status=404, message={}", ex.getMessage(), ex);
             throw ex;
 
         } catch (ExceptionLogger ex) {
@@ -86,7 +86,7 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.OK).body(service.findByActivesCategory(active));
 
         } catch (ResourceNotFoundExceptionLogger ex) {
-            logger.error("Erro ao buscar categoria:  [status=200, body={}", ex.getMessage(), ex);
+            logger.warn("Erro ao buscar categoria:  [status=404, message={}", ex.getMessage(), ex);
             throw ex;
 
         } catch (ExceptionLogger ex) {
@@ -98,7 +98,7 @@ public class CategoryController {
     @GetMapping("/descriptions")
     public ResponseEntity<List<CategoryResponse>> findByDescriptionCategory(@RequestParam(name = "description") String description) {
 
-        logger.info("Recebendo requisição para buscar categorias pela descrição: [method=GET, endpoint=/cagetories/descriptions, body={}] {}", id);
+        logger.info("Recebendo requisição para buscar categorias pela descrição: [method=GET, endpoint=/cagetories/descriptions, body={}] {}", description);
 
         try {
             logger.info("Requisição concluída com sucesso: [status=200, body={}, Total de categoria retornados={}");
@@ -106,7 +106,7 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.OK).body(service.findByDescriptionCategory(description));
 
         } catch (ResourceNotFoundExceptionLogger ex) {
-            logger.error("Erro ao buscar categoria:  [status=200, body={}", ex.getMessage(), ex);
+            logger.warn("Erro ao buscar categoria:  [status=404, message={}", ex.getMessage(), ex);
             throw ex;
 
         } catch (ExceptionLogger ex) {
@@ -125,7 +125,7 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.OK).body(service.findByIdCategory(id));
 
         } catch (ResourceNotFoundExceptionLogger ex) {
-            logger.error("Erro ao buscar categoria:  [status=200, body={}", ex.getMessage(), ex);
+            logger.error("Erro ao buscar categoria:  [status=404, body={}", ex.getMessage(), ex);
             throw ex;
 
         } catch (ExceptionLogger ex) {
@@ -187,7 +187,7 @@ public class CategoryController {
             throw ex; // A exceção será tratada pelo ExceptionHandler
 
         } catch (BusinessRuleExceptionLogger ex) {
-            logger.warn("Violação de regra de negócio ao categoria pois ela esta ativa: {}", ex.getMessage());
+            logger.warn("Violação de regra de negócio da categoria pois ela esta ativa: {}", ex.getMessage());
             throw ex; // A exceção será tratada pelo ExceptionHandler
 
         } catch (ExceptionLogger ex) {
