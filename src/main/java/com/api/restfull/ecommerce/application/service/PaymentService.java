@@ -1,5 +1,6 @@
 package com.api.restfull.ecommerce.application.service;
 
+import com.api.restfull.ecommerce.application.request.CreditCardPaymentRequest;
 import com.api.restfull.ecommerce.application.request.PaymentRequest;
 import com.api.restfull.ecommerce.application.response.PaymentResponse;
 import jakarta.transaction.Transactional;
@@ -10,13 +11,13 @@ import org.springframework.stereotype.Service;
 public interface PaymentService {
 
     @Transactional
-    PaymentResponse savePayment(PaymentRequest request);
+    PaymentResponse processCreditCardPayment(CreditCardPaymentRequest request);
 
-    @Transactional
-    Page<PaymentResponse> getAllPagedPayments(int page, int size);
-
-    @Transactional
-    PaymentResponse findByIdPayment(Long id);
+//    @Transactional
+//    Page<PaymentResponse> getAllPagedPayments(int page, int size);
+//
+//    @Transactional
+//    PaymentResponse findByIdPayment(Long id);
 //
 //    @Transactional
 //    PaymentResponse updatePayment(PaymentRequest request);

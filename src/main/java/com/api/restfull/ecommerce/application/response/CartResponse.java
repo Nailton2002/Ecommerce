@@ -1,19 +1,19 @@
 package com.api.restfull.ecommerce.application.response;
 
-import com.api.restfull.ecommerce.application.response.customer.CustomerResponse;
 import com.api.restfull.ecommerce.domain.entity.Cart;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public record CartResponse(
 
         Long id,
         String customerName,
         List<CartItemResponse> items,
-        BigDecimal totalValue,
+        BigDecimal total,
         LocalDateTime creationDate
 ) {
 
@@ -22,7 +22,7 @@ public record CartResponse(
         return new CartResponse(
                 cart.getId(),
                 cart.getCustomer().getName(),
-                cart.getItems().stream().map(CartItemResponse::fromEntityToResponse).toList(),
+                cart.getItems().stream().map(CartItemResponse::fromCartItemToResponse).toList(),
                 cart.getTotal(),
                 cart.getCreationDate() != null ? cart.getCreationDate() : LocalDateTime.now()
 

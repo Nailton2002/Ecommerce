@@ -4,6 +4,7 @@ import com.api.restfull.ecommerce.application.response.category.CategoryListResp
 import com.api.restfull.ecommerce.application.response.product.ProductListResponse;
 import com.api.restfull.ecommerce.domain.entity.CartItem;
 import com.api.restfull.ecommerce.domain.entity.Category;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,14 +17,15 @@ public record CartItemResponse(
         BigDecimal totalPrice
 ) {
 
-    public static CartItemResponse fromEntityToResponse(CartItem cartItem) {
+    public static CartItemResponse fromCartItemToResponse(CartItem cartItem) {
 
         return new CartItemResponse(
-                cartItem.getId(),
+                cartItem.getProduct().getId(),
                 cartItem.getProduct().getName(),
                 cartItem.getQuantity(),
                 cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity()))
         );
-
     }
+
+
 }

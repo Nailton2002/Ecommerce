@@ -1,56 +1,58 @@
-//package com.api.restfull.ecommerce.application.controller;
-//
-//import com.api.restfull.ecommerce.application.request.OrderItemRequest;
-//import com.api.restfull.ecommerce.application.request.PaymentRequest;
-//import com.api.restfull.ecommerce.application.response.OrderItemResponse;
-//import com.api.restfull.ecommerce.application.response.PaymentResponse;
-//import com.api.restfull.ecommerce.application.service.PaymentService;
-//import com.api.restfull.ecommerce.domain.exception.ExceptionLogger;
-//import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundExceptionLogger;
-//import lombok.RequiredArgsConstructor;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.springframework.data.domain.Page;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-//
-//import java.net.URI;
-//
-//@RestController
-//@CrossOrigin("*")
-//@RequiredArgsConstructor
-//@RequestMapping("/payments")
-//public class PaymentController {
-//
-//    private final PaymentService service;
-//
-//    private static final Logger logger = LoggerFactory.getLogger(OrdemItemController.class);
-//
-//    @PostMapping
-//    public ResponseEntity<PaymentResponse> savePayment(@RequestBody PaymentRequest request) {
-//
-//        long startTime = System.currentTimeMillis();
-//        logger.info("Recebendo requisição: [method=POST, endpoint=/payments, body={}]", request);
-//
-//        try {
-//            PaymentResponse response = service.savePayment(request);
-//            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(response.id()).toUri();
-//
-//            long executionTime = System.currentTimeMillis() - startTime;
-//            logger.info("Resposta enviada: [status=201, body={}, executionTime={}ms]", response, executionTime);
-//
-//            return ResponseEntity.created(uri).body(response);
-//
-//        } catch (ResourceNotFoundExceptionLogger ex) {
-//            logger.error("Erro ao criar Pagamento: {}", ex.getMessage(), ex);
-//            throw ex;
-//        } catch (ExceptionLogger ex) {
-//            logger.error("Erro inesperado ao criar pagamento: {}", ex.getMessage(), ex);
-//            throw ex;
-//        }
-//    }
-//
+package com.api.restfull.ecommerce.application.controller;
+
+import com.api.restfull.ecommerce.application.request.CreditCardPaymentRequest;
+import com.api.restfull.ecommerce.application.request.OrderItemRequest;
+import com.api.restfull.ecommerce.application.request.PaymentRequest;
+import com.api.restfull.ecommerce.application.response.OrderItemResponse;
+import com.api.restfull.ecommerce.application.response.PaymentResponse;
+import com.api.restfull.ecommerce.application.service.PaymentService;
+import com.api.restfull.ecommerce.domain.exception.ExceptionLogger;
+import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundExceptionLogger;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+
+@RestController
+@CrossOrigin("*")
+@RequiredArgsConstructor
+@RequestMapping("/payments")
+public class PaymentController {
+
+    private final PaymentService service;
+    private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
+
+    @PostMapping("/credit-card")
+    public ResponseEntity<PaymentResponse> processCreditCardPayment(@Valid @RequestBody CreditCardPaymentRequest request) {
+
+        long startTime = System.currentTimeMillis();
+        logger.info("Recebendo requisição: [method=POST, endpoint=/payments/credit-card, body={}]");
+
+        try {
+            PaymentResponse response = service.processCreditCardPayment(request);
+
+            long executionTime = System.currentTimeMillis() - startTime;
+            logger.info("Resposta enviada: [status=201, body={}, executionTime={}ms]", response, executionTime);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (ResourceNotFoundExceptionLogger ex) {
+            logger.error("Erro ao processar o Pagamento: {}", ex.getMessage(), ex);
+            throw ex;
+
+        } catch (ExceptionLogger ex) {
+            logger.error("Erro inesperado ao processar pagamento: {}", ex.getMessage(), ex);
+            throw ex;
+        }
+    }
+
 //    @GetMapping
 //    public ResponseEntity<Page<PaymentResponse>> getAllPagedPayments(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
 //
@@ -80,4 +82,4 @@
 //            throw ex;
 //        }
 //    }
-//}
+}
