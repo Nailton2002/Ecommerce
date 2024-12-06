@@ -61,10 +61,14 @@ public class PaymentController {
     @PostMapping("/credit-debit")
     public ResponseEntity<PaymentResponse> processDebitCardPayment(@Valid @RequestBody DebitCardPaymentRequest request) {
 
+        long startTime = System.currentTimeMillis();
         logger.info("Recebendo requisição: [method=GET, endpoint=/payments/credit-debit, body={}]", request);
 
         try {
             PaymentResponse response = service.processDebitCardPayment(request);
+
+            long executionTime = System.currentTimeMillis() - startTime;
+            logger.info("Resposta enviada: [status=201, body={}, executionTime={}ms]", response, executionTime);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
 

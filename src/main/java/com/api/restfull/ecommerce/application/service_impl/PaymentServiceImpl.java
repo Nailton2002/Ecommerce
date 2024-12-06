@@ -51,6 +51,17 @@ public class PaymentServiceImpl implements PaymentService {
                 throw new ResourceNotFoundException("Carrinho está vazio.");
             }
 
+            // Simulação de validação do cartão de crédito
+            if (!isValidCreditCard(request.cardNumber())) {
+                throw new ResourceNotFoundException("Número do cartão de crédito inválido.");
+            }
+
+            // Lógica de processamento de pagamento (simulação)
+            boolean paymentSuccess = processPayment(request.amount());
+            if (!paymentSuccess) {
+                throw new ResourceNotFoundException("Falha ao processar pagamento com cartão de crédito.");
+            }
+
             // Calcula o valor total do carrinho
             BigDecimal totalAmount = cart.getItems().stream()
                     .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
@@ -140,16 +151,31 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
+    // =============================================================================================================
 
     // Métodos auxiliares de validação e processamento (simulação)
 
+
+    /**
+     * Processa pagamento com cartão de crédito.
+     */
+    private boolean isValidCreditCard(String cardNumber) {
+        // Simulação de validação do cartão de crédito
+        return cardNumber.length() == 16; // Exemplo simplificado
+    }
+
+    /**
+     * Processa pagamento com cartão de débito.
+     */
     private boolean isValidDebitCard(String cardNumber) {
         // Simulação de validação do cartão de débito
         return cardNumber.length() == 16; // Exemplo simplificado
     }
 
+
+    // Simulação do processamento do pagamento
     private boolean processPayment(BigDecimal amount) {
-        // Simulação do processamento do pagamento
-        return amount.compareTo(BigDecimal.ZERO) > 0; // Sucesso se o valor for maior que zero
+        // Sucesso se o valor for maior que zero
+        return amount.compareTo(BigDecimal.ZERO) > 0;
     }
 }
