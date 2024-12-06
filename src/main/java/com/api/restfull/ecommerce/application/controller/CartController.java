@@ -4,6 +4,7 @@ import com.api.restfull.ecommerce.application.request.CartItemRequest;
 import com.api.restfull.ecommerce.application.request.CartRequest;
 import com.api.restfull.ecommerce.application.response.CartResponse;
 import com.api.restfull.ecommerce.application.service.CartService;
+import com.api.restfull.ecommerce.domain.exception.BusinessRuleExceptionLogger;
 import com.api.restfull.ecommerce.domain.exception.ExceptionLogger;
 import com.api.restfull.ecommerce.domain.exception.ResourceNotFoundExceptionLogger;
 import jakarta.validation.Valid;
@@ -96,6 +97,33 @@ public class CartController {
 
         } catch (ExceptionLogger ex) {
             logger.error("Erro inesperado ao remover Item do Pedido ao carrinho: {}", ex.getMessage(), ex);
+            throw ex;
+        }
+    }
+
+    @PatchMapping("/{cartId}")
+    public ResponseEntity<CartResponse> clearItemToCart(@PathVariable Long cartId) {
+
+        logger.info("Recebendo requisição: [method=PATCH, endpoint=/carts/{cartId}, body={}]", cartId);
+
+        try {
+            CartResponse response = service.clearCart(cartId);
+
+            logger.info("Resposta enviada: [status=200, body={}, executionTime={}ms]", response);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+
+
+        } catch (ResourceNotFoundExceptionLogger ex) {
+            logger.error("Erro ao limpar carrinho: {}", ex.getMessage(), ex);
+            throw ex; // A exceção será tratada pelo ExceptionHandler
+
+        } catch (BusinessRuleExceptionLogger ex) {
+            logger.warn("Violação de regra de negócio do carrinho: {}", ex.getMessage());
+            throw ex; // A exceção será tratada pelo ExceptionHandler
+
+        } catch (ExceptionLogger ex) {
+            logger.error("Erro inesperado ao limpar carrinho: {}", ex.getMessage(), ex);
             throw ex;
         }
     }

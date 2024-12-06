@@ -17,5 +17,8 @@ public interface CartService {
     @Transactional
     CartResponse removeItemToCart(Long cartId, CartItemRequest request);
 
+    @Transactional
+    CartResponse clearCart(Long cartId);
+
 
 }

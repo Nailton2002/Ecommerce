@@ -170,5 +170,31 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    public CartResponse clearCart(Long cartId) {
+
+        logger.info("Limpando Item do Pedido no carrinho ID: {}", cartId);
+        try {
+
+            // Recupera o carrinho pelo ID
+            Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("Carrinho não encontrado com ID: " + cartId));
+
+            // Limpa os itens do carrinho
+            cart.getItems().clear();
+
+            // Atualiza o total do carrinho para zero
+            cart.setTotal(BigDecimal.ZERO);
+
+            // Salva o estado atualizado do carrinho
+            cartRepository.save(cart);
+
+            // Retorna a resposta do carrinho atualizado
+            return CartResponse.fromCartToResponse(cart);
+
+        } catch (ExceptionLogger ex) {
+            logger.error("Erro ao limpar Item do Pedido ao carrinho: {}", ex.getMessage(), ex);
+            throw ex;
+        }
+    }
+
 
 }
