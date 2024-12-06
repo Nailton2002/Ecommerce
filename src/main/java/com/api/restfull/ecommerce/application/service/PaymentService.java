@@ -1,6 +1,7 @@
 package com.api.restfull.ecommerce.application.service;
 
 import com.api.restfull.ecommerce.application.request.CreditCardPaymentRequest;
+import com.api.restfull.ecommerce.application.request.DebitCardPaymentRequest;
 import com.api.restfull.ecommerce.application.request.PaymentRequest;
 import com.api.restfull.ecommerce.application.response.PaymentResponse;
 import jakarta.transaction.Transactional;
@@ -12,6 +13,9 @@ public interface PaymentService {
 
     @Transactional
     PaymentResponse processCreditCardPayment(CreditCardPaymentRequest request);
+
+    @Transactional
+    PaymentResponse processDebitCardPayment(DebitCardPaymentRequest request);
 
 //    @Transactional
 //    Page<PaymentResponse> getAllPagedPayments(int page, int size);

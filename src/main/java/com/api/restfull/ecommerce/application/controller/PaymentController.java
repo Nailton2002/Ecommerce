@@ -1,6 +1,7 @@
 package com.api.restfull.ecommerce.application.controller;
 
 import com.api.restfull.ecommerce.application.request.CreditCardPaymentRequest;
+import com.api.restfull.ecommerce.application.request.DebitCardPaymentRequest;
 import com.api.restfull.ecommerce.application.request.OrderItemRequest;
 import com.api.restfull.ecommerce.application.request.PaymentRequest;
 import com.api.restfull.ecommerce.application.response.OrderItemResponse;
@@ -33,7 +34,7 @@ public class PaymentController {
     public ResponseEntity<PaymentResponse> processCreditCardPayment(@Valid @RequestBody CreditCardPaymentRequest request) {
 
         long startTime = System.currentTimeMillis();
-        logger.info("Recebendo requisição: [method=POST, endpoint=/payments/credit-card, body={}]");
+        logger.info("Recebendo requisição: [method=POST, endpoint=/payments/credit-card, body={}]", request);
 
         try {
             PaymentResponse response = service.processCreditCardPayment(request);
@@ -44,30 +45,43 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
         } catch (ResourceNotFoundExceptionLogger ex) {
-            logger.error("Erro ao processar o Pagamento: {}", ex.getMessage(), ex);
+            logger.warn("Recurso não encontrado: [status=404, message={}]", ex.getMessage(), ex);
             throw ex;
 
         } catch (ExceptionLogger ex) {
+            logger.error("Erro ao processar o Pagamento: {}", ex.getMessage(), ex);
+            throw ex;
+
+        } catch (Exception ex) {
             logger.error("Erro inesperado ao processar pagamento: {}", ex.getMessage(), ex);
             throw ex;
         }
     }
 
-//    @GetMapping
-//    public ResponseEntity<Page<PaymentResponse>> getAllPagedPayments(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
-//
-//        logger.info("Recebendo requisição: [method=GET, endpoint=/payments, body={}]", page, size);
-//
-//        try {
-//            Page<PaymentResponse> response = service.getAllPagedPayments(page, size);
-//            logger.info("Requisição concluída com sucesso: [status=200, body={}, Total de itens retornados={}", response.getTotalElements());
-//            return ResponseEntity.ok(response);
-//        } catch (ExceptionLogger ex) {
-//            logger.error("Erro ao listar pagamentos: {}", ex.getMessage(), ex);
-//            throw ex;
-//        }
-//    }
-//
+    @PostMapping("/credit-debit")
+    public ResponseEntity<PaymentResponse> processDebitCardPayment(@Valid @RequestBody DebitCardPaymentRequest request) {
+
+        logger.info("Recebendo requisição: [method=GET, endpoint=/payments/credit-debit, body={}]", request);
+
+        try {
+            PaymentResponse response = service.processDebitCardPayment(request);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (ResourceNotFoundExceptionLogger ex) {
+            logger.warn("Recurso não encontrado: [status=404, message={}]", ex.getMessage(), ex);
+            throw ex;
+
+        } catch (ExceptionLogger ex) {
+            logger.error("Erro inesperado ao processar pagamento com cartão de débito: [message={}]", ex.getMessage(), ex);
+            throw ex;
+
+        } catch (Exception ex) {
+            logger.error("Erro genérico inesperado: [message={}]", ex.getMessage(), ex);
+            throw new RuntimeException("Erro ao processar a solicitação.", ex);
+        }
+    }
+
 //    @GetMapping("/{id}")
 //    public ResponseEntity<PaymentResponse> findByIdOrderItem(@PathVariable Long id) {
 //        logger.info("Recebendo requisição para buscar Item do Pedido pelo ID: [method=GET, endpoint=/order-items, body={}] {}", id);

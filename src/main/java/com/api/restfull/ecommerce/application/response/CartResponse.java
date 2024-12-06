@@ -1,6 +1,7 @@
 package com.api.restfull.ecommerce.application.response;
 
 import com.api.restfull.ecommerce.domain.entity.Cart;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ public record CartResponse(
         String customerName,
         List<CartItemResponse> items,
         BigDecimal total,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss'Z'", timezone = "GMT")
         LocalDateTime creationDate
 ) {
 

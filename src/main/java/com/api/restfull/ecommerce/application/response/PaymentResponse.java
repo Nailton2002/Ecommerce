@@ -25,8 +25,8 @@ public record PaymentResponse(
         return new PaymentResponse("SUCCESS", amount, "Pagamento com cartão de crédito aprovado.", transactionId, cart, dataPayment);
     }
 
-    public static PaymentResponse fromDebitCard(BigDecimal amount, String transactionId, LocalDateTime dataPayment) {
-        return new PaymentResponse("SUCCESS", amount, "Pagamento com cartão de débito aprovado.", transactionId, null, dataPayment);
+    public static PaymentResponse fromDebitCard(BigDecimal amount, String transactionId, CartResponse cart, LocalDateTime dataPayment) {
+        return new PaymentResponse("SUCCESS", amount, "Pagamento com cartão de débito aprovado.", transactionId, cart, dataPayment);
     }
 
     public static PaymentResponse fromPix(BigDecimal amount, String transactionId, LocalDateTime dataPayment) {
