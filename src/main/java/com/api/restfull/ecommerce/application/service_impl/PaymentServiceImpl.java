@@ -3,6 +3,7 @@ package com.api.restfull.ecommerce.application.service_impl;
 import com.api.restfull.ecommerce.application.request.CreditCardPaymentRequest;
 import com.api.restfull.ecommerce.application.request.DebitCardPaymentRequest;
 import com.api.restfull.ecommerce.application.request.PaymentRequest;
+import com.api.restfull.ecommerce.application.request.PixPaymentRequest;
 import com.api.restfull.ecommerce.application.response.CartResponse;
 import com.api.restfull.ecommerce.application.response.PaymentResponse;
 import com.api.restfull.ecommerce.application.service.PaymentService;
@@ -31,7 +32,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
-    //    private final PaymentRepository repository;
     private final CartRepository cartRepository;
     private static final Logger logger = LoggerFactory.getLogger(PaymentService.class);
 
@@ -39,7 +39,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentResponse processCreditCardPayment(CreditCardPaymentRequest request) {
 
-        logger.info("Iniciando processar pagamento com cartão de crédito: [name={}, categoryId={}]", request.cartId());
+        logger.info("Iniciando processar pagamento com cartão de crédito:", request.cartId());
 
         try {
 
@@ -97,7 +97,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentResponse processDebitCardPayment(DebitCardPaymentRequest request) {
 
-        logger.info("Iniciando processar pagamento com cartão de débito: [name={}, categoryId={}]", request);
+        logger.info("Iniciando processar pagamento com cartão de débito:", request);
         try {
 
             // Recupera o carrinho com base no cartId
@@ -151,6 +151,64 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
+    @Override
+    public PaymentResponse processPixPayment(PixPaymentRequest request) {
+
+        logger.info("Iniciando processar pagamento com pix:", request);
+        try {
+
+            // Recupera o carrinho com base no cartId
+            Cart cart = cartRepository.findById(request.cartId()).orElseThrow(() -> new ResourceNotFoundException("Carrinho não encontrado"));
+
+            // Verifique se os itens estão presentes no carrinho
+            if (cart.getItems() == null || cart.getItems().isEmpty()) {
+                throw new ResourceNotFoundException("Carrinho está vazio.");
+            }
+
+            // Validação da chave PIX
+            if (!isValidPixKey(request.pixKey())) {
+                throw new ResourceNotFoundException("Chave PIX inválida.");
+            }
+
+            // Lógica de processamento do pagamento via PIX (simulação)
+            boolean paymentSuccess = processPayment(request.amount());
+            if (!paymentSuccess) {
+                throw new ResourceNotFoundException("Falha ao processar pagamento via PIX.");
+            }
+
+            // Calcula o valor total do carrinho
+            BigDecimal totalAmount = cart.getItems().stream()
+                    .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            // Gera um ID de transação único
+            String transactionId = "TRX-PIX-" + UUID.randomUUID();
+
+            // Monta a resposta do pagamento, incluindo o carrinho com seus itens
+            CartResponse cartResponse = CartResponse.fromCartToResponse(cart);
+
+            return PaymentResponse.fromPix(request.amount(), transactionId, LocalDateTime.now());
+
+        } catch (
+                DataIntegrityViolationException ex) {
+            logger.error("Erro de integridade ao processar pagamento com pix: {}", ex.getMessage(), ex);
+            throw new DataIntegrityValidationException("O nome do produto já existe.");
+
+        } catch (BusinessRuleException ex) {
+            logger.warn("Regra de negócio violada ao processar pagamento com pix: {}", ex.getMessage(), ex);
+            throw ex;
+
+        } catch (ExceptionLogger ex) {
+            logger.error("Erro inesperado ao processar pagamento com pix: {}", ex.getMessage(), ex);
+            throw ex;
+
+        } catch (Exception ex) {
+            logger.error("Erro genérico ao processar pagamento com pix: {}", ex.getMessage(), ex);
+            throw new RuntimeException("Erro ao processar pagamento com pix.", ex);
+
+        }
+    }
+
     // =============================================================================================================
 
     // Métodos auxiliares de validação e processamento (simulação)
@@ -172,6 +230,13 @@ public class PaymentServiceImpl implements PaymentService {
         return cardNumber.length() == 16; // Exemplo simplificado
     }
 
+    /**
+     * Processa pagamento com pix.
+     */
+    private boolean isValidPixKey(String pixKey) {
+        // Simulação de validação da chave PIX
+        return pixKey != null && !pixKey.trim().isEmpty();
+    }
 
     // Simulação do processamento do pagamento
     private boolean processPayment(BigDecimal amount) {

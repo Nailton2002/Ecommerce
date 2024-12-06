@@ -1,9 +1,6 @@
 package com.api.restfull.ecommerce.application.controller;
 
-import com.api.restfull.ecommerce.application.request.CreditCardPaymentRequest;
-import com.api.restfull.ecommerce.application.request.DebitCardPaymentRequest;
-import com.api.restfull.ecommerce.application.request.OrderItemRequest;
-import com.api.restfull.ecommerce.application.request.PaymentRequest;
+import com.api.restfull.ecommerce.application.request.*;
 import com.api.restfull.ecommerce.application.response.OrderItemResponse;
 import com.api.restfull.ecommerce.application.response.PaymentResponse;
 import com.api.restfull.ecommerce.application.service.PaymentService;
@@ -86,18 +83,33 @@ public class PaymentController {
         }
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<PaymentResponse> findByIdOrderItem(@PathVariable Long id) {
-//        logger.info("Recebendo requisição para buscar Item do Pedido pelo ID: [method=GET, endpoint=/order-items, body={}] {}", id);
-//        try {
-//            logger.info("Requisição concluída com sucesso: Item encontrado ID={}", service.findByIdPayment(id).id());
-//            return ResponseEntity.ok(service.findByIdPayment(id));
-//        } catch (ResourceNotFoundExceptionLogger ex) {
-//            logger.error("Erro ao buscar payment:  [status=200, body={}", ex.getMessage(), ex);
-//            throw ex;
-//        } catch (ExceptionLogger ex) {
-//            logger.error("Erro inesperado ao buscar payment: {}", ex.getMessage(), ex);
-//            throw ex;
-//        }
-//    }
+    @PostMapping("/pix")
+    public ResponseEntity<PaymentResponse> processPixPayment(@Valid @RequestBody PixPaymentRequest request) {
+
+        long startTime = System.currentTimeMillis();
+        logger.info("Recebendo requisição: [method=GET, endpoint=/payments/pix, body={}]", request);
+
+        try {
+            PaymentResponse response = service.processPixPayment(request);
+
+            long executionTime = System.currentTimeMillis() - startTime;
+            logger.info("Resposta enviada: [status=201, body={}, executionTime={}ms]", response, executionTime);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (ResourceNotFoundExceptionLogger ex) {
+            logger.warn("Recurso não encontrado: [status=404, message={}]", ex.getMessage(), ex);
+            throw ex;
+
+        } catch (ExceptionLogger ex) {
+            logger.error("Erro inesperado ao processar pix: [message={}]", ex.getMessage(), ex);
+            throw ex;
+
+        } catch (Exception ex) {
+            logger.error("Erro genérico inesperado: [message={}]", ex.getMessage(), ex);
+            throw new RuntimeException("Erro ao processar a solicitação.", ex);
+        }
+    }
+
+
 }

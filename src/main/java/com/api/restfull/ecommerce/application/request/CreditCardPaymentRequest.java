@@ -13,7 +13,7 @@ public record CreditCardPaymentRequest(
         @NotNull(message = "O ID do carrinho é obrigatório.")
         Long cartId,
 
-//      @NotNull(message = "O valor do pagamento é obrigatório.")
+      @NotNull(message = "O valor do pagamento é obrigatório.")
         @Positive(message = "O valor do pagamento deve ser positivo.")
         BigDecimal amount,
 

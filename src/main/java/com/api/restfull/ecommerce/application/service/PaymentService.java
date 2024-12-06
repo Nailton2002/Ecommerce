@@ -3,6 +3,7 @@ package com.api.restfull.ecommerce.application.service;
 import com.api.restfull.ecommerce.application.request.CreditCardPaymentRequest;
 import com.api.restfull.ecommerce.application.request.DebitCardPaymentRequest;
 import com.api.restfull.ecommerce.application.request.PaymentRequest;
+import com.api.restfull.ecommerce.application.request.PixPaymentRequest;
 import com.api.restfull.ecommerce.application.response.PaymentResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -17,15 +18,8 @@ public interface PaymentService {
     @Transactional
     PaymentResponse processDebitCardPayment(DebitCardPaymentRequest request);
 
-//    @Transactional
-//    Page<PaymentResponse> getAllPagedPayments(int page, int size);
-//
-//    @Transactional
-//    PaymentResponse findByIdPayment(Long id);
-//
-//    @Transactional
-//    PaymentResponse updatePayment(PaymentRequest request);
-//
-//    @Transactional
-//    void deletePayment(Long id);
+    @Transactional
+    PaymentResponse processPixPayment(PixPaymentRequest request);
+
+
 }
